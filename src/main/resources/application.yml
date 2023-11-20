@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/traveljoy
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  thymeleaf:
+    check-template-location: true
+    prefix: classpath:/templates/
+    suffix: .html   # 파일 확장자
+    # TODO : 배포시 true 처리
+    cache: false # default true 개발 시에는 false 로 두는게 좋다.
+    enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+      # show_sql: true
+        format_sql: true
+logging.level:
+  org.hibernate.SQL: debug
+# org.hibernate.type: trace
