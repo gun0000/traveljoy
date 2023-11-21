@@ -30,12 +30,12 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
                         //로그인하지 않아도 들어갈 수 있거나 보여야할 예외
-                        .requestMatchers("/","/room/**","/member/**","/status","/css/**","/js/**", "/images/**", "/view/join", "/auth/join","/view/login").permitAll()
+                        .requestMatchers("/","admin/**","/room/**","/reserve/**","/member/**","/status","/css/**","/js/**", "/images/**", "/view/join", "/auth/join","/view/login").permitAll()
                         .anyRequest().authenticated()	// 어떠한 요청이라도 인증필요
                 )
                 //.formLogin(AbstractHttpConfigurer::disable)
                 .formLogin(login -> login	// form 방식 로그인 사용
-                        .loginPage("/view/login")	// [A] 커스텀 로그인 페이지 지정
+                        .loginPage("/member/login")	// [A] 커스텀 로그인 페이지 지정
                         .loginProcessingUrl("/login-process")	// [B] submit 받을 url
                         .usernameParameter("userid")	// [C] submit할 아이디
                         .passwordParameter("pw")	// [D] submit할 비밀번호

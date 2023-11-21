@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+@font-face{
+	font-family:"SUIT";
+	font-weight:300;
+	src:local("SUIT-Light"),
+	url("/css/fonts/SUIT-Light.woff2") format("woff2"),
+	url("/css/fonts/SUIT-Light.opentype") format("wopentypeoff");
+}
+
+@font-face{
+	font-family:"SUIT";
+	font-weight:400;
+	src:local("SUIT-Regular"),
+	url("/css/fonts/SUIT-Regular.woff2") format("woff2"),
+	url("/css/fonts/SUIT-Regular.opentype") format("opentype");
+}
+
+@font-face{
+	font-family:"SUIT";
+	font-weight:600;
+	src:local("SUIT-SemiBold"),
+	url("/css/fonts/SUIT-SemiBold.woff2") format("woff2"),
+	url("/css/fonts/SUIT-SemiBold.opentype") format("opentype");
+}
+
+@font-face{
+	font-family:"SUIT";
+	font-weight:700;
+	src:local("SUIT-Bold"),
+	url("../../assets/fonts/SUIT-Bold.woff2") format("woff2"),
+	url("../../assets/fonts/SUIT-Bold.opentype") format("opentype");
+}
