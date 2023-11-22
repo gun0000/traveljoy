@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>관리자페이지-숙소등록</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/font.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}">
+        <style>
+
+            .table-responsive {
+                display: block;
+                width: 100%;
+                overflow-x: clip;
+                -webkit-overflow-scrolling: touch;
+            }
+            .table th{background: #cfcfcf3d;}
+
+
+
+            label {
+                display: inline-block;
+                margin-bottom: 0.5rem;
+            }
+            div.dataTables_wrapper div.dataTables_length select {
+                width: auto;
+                display: inline-block;
+            }
+            .custom-select {
+                display: inline-block;
+                width: 100%;
+                height: calc(1.5em + 0.75rem + 2px);
+                font-size: 1rem;
+                font-weight: 400;
+                line-height: 1.5;
+                color: #6e707e;
+                vertical-align: middle;
+                -webkit-appearance: auto;
+            }
+            div.dataTables_wrapper div.dataTables_filter {
+                text-align: right;
+            }
+            div.dataTables_wrapper div.dataTables_filter input {
+                margin-left: 0.5em;
+                display: inline-block;
+                width: auto;
+            }
+            .form-control-sm {
+                height: calc(1.5em + 0.5rem + 2px);
+                padding: 0.25rem 0.5rem;
+                font-size: .875rem;
+                line-height: 1.5;
+                border-radius: 0.2rem;
+            }
+            /*페이징왼쪽부분*/
+            div.dataTables_wrapper div.dataTables_info {
+                padding-top: 0.85em;
+            }
+            /*페이징*/
+            div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+                margin: 2px 0;
+                white-space: nowrap;
+                justify-content: flex-end;
+            }
+            .page-item.active .page-link {
+                z-index: 3;
+                color: #fff;
+                background-color: #03c75a;
+                border-color: #03c75a;
+            }
+            .page-link {
+                position: relative;
+                display: block;
+                padding: var(--bs-pagination-padding-y) var(--bs-pagination-padding-x);
+                font-size: var(--bs-pagination-font-size);
+                color: #03c75a;
+                text-decoration: none;
+                background-color: var(--bs-pagination-bg);
+                border: var(#03c75a) solid var(#03c75a);
+                transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+            }
+            .page-link:hover {
+                z-index: 2;
+                color: rgba(3, 199, 90, 1);
+                background-color: var(--bs-pagination-hover-bg);
+                border-color: rgba(3, 199, 90, 1);
+            }
+            .page-link:focus {
+                z-index: 3;
+                color: rgba(3, 199, 90, 1);
+                background-color: var(--bs-pagination-focus-bg);
+                outline: 0;
+                box-shadow: var(--bs-green);
+            }
+        </style>
+    </head>
+    <body>
+    <main id="wrapper">
+        <!--사이드바공통영역-->
+        <th:block th:replace="~{admin/common/sidebar :: sidebar}"></th:block>
+
+        <!-- 콘텐츠 -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- 메인 콘텐츠 -->
+            <div id="content">
+                
+                <!-- 상단바 -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- 상단바 탐색바 -->
+                    <ul class="navbar-nav ml-auto">
+
+                    <!--헤더공통영역-->
+                    <th:block th:replace="~{/admin/common/header :: header}"></th:block>
+
+                    </ul>
+
+
+
+                </nav>
+                <!-- 상단바 끝 -->
+
+                <!-- 페이지 콘텐츠 시작-->
+                <div class="container-fluid">
+
+                    <!-- 페이지 제목 -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">숙소 목록</h1>
+                    </div>
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary"></h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-6">
+                                            <div class="dataTables_length" id="dataTable_length">
+                                                <label> 
+                                                    <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
+                                                        <option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option>
+                                                    </select> 항목 보기</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-md-6">
+                                                <div id="dataTable_filter" class="dataTables_filter">
+                                                    <label>검색:
+                                                        <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+                                                <thead>
+                                                    <tr role="row">
+                                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 105px;">
+                                                            숙소이름
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 50px;">
+                                                            숙소지역
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 74px;">
+                                                            숙소테마
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: 31px;">
+                                                            숙소가격
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 20px;">
+                                                            숙소등록일
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 67px;">
+                                                            숙소기타
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    
+                                                    <tr class="odd">
+                                                        <td class="sorting_1">숙소이름</td>
+                                                        <td>숙소지역</td>
+                                                        <td>숙소테마</td>
+                                                        <td>숙소가격</td>
+                                                        <td>2008/11/28</td>
+                                                        <td>
+                                                            <button>숙소수정</button>
+                                                            <button>숙소삭제</button>
+                                                        </td>
+                                                    </tr><tr class="even">
+                                                        <td class="sorting_1">숙소이름</td>
+                                                        <td>숙소지역</td>
+                                                        <td>숙소테마</td>
+                                                        <td>숙소가격</td>
+                                                        <td>2009/10/09</td>
+                                                        <td>
+                                                            <button>숙소수정</button>
+                                                            <button>숙소삭제</button>
+                                                        </td>
+                                                    </tr><tr class="odd">
+                                                        <td class="sorting_1">숙소이름</td>
+                                                        <td>숙소지역</td>
+                                                        <td>숙소테마</td>
+                                                        <td>숙소가격</td>
+                                                        <td>2009/01/12</td>
+                                                        <td>
+                                                            <button>숙소수정</button>
+                                                            <button>숙소삭제</button>
+                                                        </td>
+                                                    </tr><tr class="even">
+                                                        <td class="sorting_1">숙소이름</td>
+                                                        <td>숙소지역</td>
+                                                        <td>숙소테마</td>
+                                                        <td>숙소가격</td>
+                                                        <td>2012/10/13</td>
+                                                        <td>
+                                                            <button>숙소수정</button>
+                                                            <button>숙소삭제</button>
+                                                        </td>
+                                                    </tr><tr class="odd">
+                                                        <td class="sorting_1">숙소이름</td>
+                                                        <td>숙소지역</td>
+                                                        <td>숙소테마</td>
+                                                        <td>숙소가격</td>
+                                                        <td>2011/06/07</td>
+                                                        <td>
+                                                            <button>숙소수정</button>
+                                                            <button>숙소삭제</button>
+                                                        </td>
+                                                    </tr><tr class="even">
+                                                        <td class="sorting_1">숙소이름</td>
+                                                        <td>숙소지역</td>
+                                                        <td>숙소테마</td>
+                                                        <td>숙소가격</td>
+                                                        <td>2012/12/02</td>
+                                                        <td>
+                                                            <button>숙소수정</button>
+                                                            <button>숙소삭제</button>
+                                                        </td>
+                                                    </tr><tr class="odd">
+                                                        <td class="sorting_1">숙소이름</td>
+                                                        <td>숙소지역</td>
+                                                        <td>숙소테마</td>
+                                                        <td>숙소가격</td>
+                                                        <td>2011/05/03</td>
+                                                        <td>
+                                                            <button>숙소수정</button>
+                                                            <button>숙소삭제</button>
+                                                        </td>
+                                                    </tr><tr class="even">
+                                                        <td class="sorting_1">숙소이름</td>
+                                                        <td>숙소지역</td>
+                                                        <td>숙소테마</td>
+                                                        <td>숙소가격</td>
+                                                        <td>2011/12/12</td>
+                                                        <td>
+                                                            <button>숙소수정</button>
+                                                            <button>숙소삭제</button>
+                                                        </td>
+                                                    </tr><tr class="odd">
+                                                        <td class="sorting_1">숙소이름</td>
+                                                        <td>숙소지역</td>
+                                                        <td>숙소테마</td>
+                                                        <td>숙소가격</td>
+                                                        <td>2011/12/06</td>
+                                                        <td>
+                                                            <button>숙소수정</button>
+                                                            <button>숙소삭제</button>
+                                                        </td>
+                                                    </tr><tr class="even">
+                                                        <td class="sorting_1">숙소이름</td>
+                                                        <td>숙소지역</td>
+                                                        <td>숙소테마</td>
+                                                        <td>숙소가격</td>
+                                                        <td>2012/03/29</td>
+                                                        <td>
+                                                            <button>숙소수정</button>
+                                                            <button>숙소삭제</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-5">
+                                <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">
+                                    57개 항목 중 1~10개 표시 중
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-7">
+                                <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                                    <ul class="pagination">
+                                        <li class="paginate_button page-item previous disabled" id="dataTable_previous">
+                                            <a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
+                                                이전
+                                            </a>
+                                        </li>
+                                        <li class="paginate_button page-item active">
+                                            <a href="#" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">
+                                                1
+                                            </a>
+                                        </li>
+                                        <li class="paginate_button page-item ">
+                                            <a href="#" aria-controls="dataTable" data-dt-idx="2" tabindex="0" class="page-link">
+                                                2
+                                            </a>
+                                        </li>
+                                        <li class="paginate_button page-item ">
+                                            <a href="#" aria-controls="dataTable" data-dt-idx="3" tabindex="0" class="page-link">
+                                                3
+                                            </a>
+                                        </li>
+                                        <li class="paginate_button page-item ">
+                                            <a href="#" aria-controls="dataTable" data-dt-idx="4" tabindex="0" class="page-link">
+                                                4
+                                            </a>
+                                        </li>
+                                        <li class="paginate_button page-item ">
+                                            <a href="#" aria-controls="dataTable" data-dt-idx="5" tabindex="0" class="page-link">
+                                                5
+                                            </a>
+                                        </li>
+                                        <li class="paginate_button page-item ">
+                                            <a href="#" aria-controls="dataTable" data-dt-idx="6" tabindex="0" class="page-link">
+                                                6
+                                            </a>
+                                        </li>
+                                        <li class="paginate_button page-item next" id="dataTable_next">
+                                            <a href="#" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">
+                                                다음
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--페이지 콘텐츠 시작 !끝-->
+            </div>
+            <!-- 메인 콘텐츠 !끝 -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>© 2023 Company, Inc</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- 콘텐츠 end -->
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+    <script>
+        let uploadCount = 0;
+
+        document.getElementById('inputContainer').addEventListener('change', function(event) {
+            let files = event.target.files;
+            let file = files[0];
+            let fileType = file['type'];
+            let validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+
+            if (!validImageTypes.includes(fileType)) {
+                alert('잘못된 파일 형식입니다. 이미지 파일만 업로드 가능합니다.');
+                event.target.value = '';
+            } else {
+                if (uploadCount >= 6) {
+                    alert('이미지는 최대 6개까지만 업로드 가능합니다.');
+                    event.target.value = '';
+                } else {
+                    uploadCount++;
+                    let newInput = document.createElement('input');
+                    newInput.type = 'file';
+                    newInput.id = 'imageUpload' + (uploadCount + 1);
+                    newInput.name = 'images';
+                    newInput.accept = '.jpg, .jpeg, .png, .gif';
+                    document.getElementById('inputContainer').appendChild(newInput);
+
+                    // 이미지 미리보기
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        let newImage = document.createElement('img');
+                        newImage.src = e.target.result;
+                        newImage.style.maxWidth = '500px';  // 최대 너비 설정
+                        newImage.style.maxHeight = '500px'; // 최대 높이 설정
+                        document.getElementById('imagePreviewContainer').appendChild(newImage);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+    </script>
+
+    </body>
+</html>

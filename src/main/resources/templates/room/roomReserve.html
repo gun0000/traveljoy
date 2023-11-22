@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>트립조이-예약하기</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/font.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+  <style>
+  </style>
+</head>
+<body>
+  <!--헤더공통영역-->
+  <th:block th:replace="~{common/header :: header}"></th:block>
+  <main>
+    <!--숙소 클릭시 화면-->
+    <section class="py-5">
+      <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <!--예약정보-->
+                <div>
+                  <!--예약제목-->
+                  <div class="mb-4">
+                    <h1 class="fw-bolder mb-1">예약정보</h1>
+                  </div>
+                  <div>
+                    <div class="row">
+                      <!-- 예약 숙소 이미지-->
+                      <div class="col-4">
+                        <img class="img-fluid rounded" src="https://dummyimage.com/200x200/ced4da/6c757d.jpg">
+                      </div>
+                      <div class="col-8">
+                        <!-- 예약 숙소 정보-->
+                        <div class="mb-5">
+                          <!-- 숙소이름부분-->
+                          <h4 class="fw-bolder mb-1">숙소이름</h4>
+                          <p class="fs-5 mb-3">2023년 11월 23일 ~ 2023년 11월 24일</p>
+                          <p class="fs-5 mb-3">성인 : 2명 어린이 : 1명</p>
+                          <!--가격부분-->
+                          <p class="fs-5 mb-3">1박당 금액 : 100,000원</p>
+                          <p class="fs-5 mb-3">총 결제 금액 : 200,000원</p>
+                        </div>
+                      </div>
+                    </div>
+                    <!--예약자 정보-->
+                    <div class="fs-5 mb-3">
+                      <h2>예약자 정보</h2>
+                    </div>
+                    <div class="fs-5 mb-3">
+                      예약자 이름 : 홍길동
+                    </div>
+                    <div class="fs-5 mb-3">
+                      예약자 이메일 : 홍길동@naver.com
+                    </div>
+                    
+                  </div>
+                </div>
+            </div>
+            <!-- 예약부분 -->
+            <div class="col-lg-4">
+                <!-- 예약부분-->
+                <div class="card mb-4">
+                    <div class="card-body">
+                      <h4 class="fw-bolder mb-1">결제 정보</h4>
+                      <div>숙소이름</div>
+                      <div>2박</div>
+                      <div>체크인</div>
+                      <div>체크아웃</div>
+                      <div>총 결제 금액 200,000원</div>
+                      <div>약관 안내</div>
+                      <div>
+                        개인정보 제공 동의(필수)
+                        개인정보 수집 및 이용 동의(필수)
+
+                        위 약관을 확인하였으며,
+                        회원 본인은 약관 및 결제에 동의합니다.
+                      </div>
+                      <!--예약하기--> 
+                      <div class="btn-wrap">
+                        <a href="javascript:void(0);" class="btn-type full" id="aBtnLogin">200,000원 결제하기</a>
+                      </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </section>
+
+
+
+
+  </main>
+
+  <!--footer공통영역-->
+  <th:block th:replace="~{common/footer :: footer}"></th:block>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+</body>
+</html>

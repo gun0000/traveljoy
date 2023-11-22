@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko" style="--vh: 4.89px;" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link rel="icon" href="/static/assets/favicons/favicon.png">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/font.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+    <style>
+      *{}
+      body{
+        
+        line-height: 1.25;
+        font-family: "SUIT", sans-serif;
+        font-size: 15px;
+        color: #111;
+      }
+      @media (min-width: 1200px){
+        #content {
+            padding-bottom: 120px;
+        }
+        .inner {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0;
+        }
+        .page-header {
+          position: inherit;
+          text-align: center;
+          padding-right: 0;
+        }
+        .page-header .page-title.v2 {
+          font-size: 40px;
+        }
+        .sub-title{
+          margin-top: 25px;
+          font-size: 20px;
+          line-height: 1.5;
+          font-weight: 500;
+          color: #111;
+        }
+        .section-login .login-wrap {
+          width: 504px;
+          margin: 0 auto;
+        }
+        .form-item {
+          position: relative;
+          margin-top: 12px;
+        }
+        .form-item input:not(:placeholder-shown) + .title {
+          font-size: 11px;
+          top: 9px;
+          color: #94949a;
+        }
+
+        .form-item input {
+          padding-top: 15px;
+        }
+        .form-item input {
+          box-sizing: border-box;
+          height: 64px;
+          font-size: 18px;
+          padding: 0 20px;
+          border: 1px solid #efefef;
+          background: #f4f4f4;
+          color: #111;
+          border-radius: 12px;
+        }
+        .form-item label.title {
+          font-size: 18px;
+          top: 21px;
+        }
+        .btn-type full{
+          max-width: 100%;
+          height: 64px;
+          font-size: 20px;
+        }
+        .chk-box label {
+          font-size: 16px;
+          font-weight: 600;
+          margin-right: 10px
+        }
+        .sns-box {
+          padding-top: 60px;
+          text-align: center;
+        }
+        .tooltip {
+          background: #fff;
+          border-radius: 27px;
+          padding: 17px 19px;
+          font-size: 18px;
+          min-width: 185px;
+        }
+      }
+      #content {
+        padding: 30px 0 80px;
+      }
+      .inner {
+        position: relative;
+        width: 100%;
+        padding: 0 20px;
+      }
+      .page-header.t-c {
+        text-align: center;
+        padding-right: 0;
+      }
+      .login-wrap {
+        width: 100%;
+        margin: 0 auto;
+      }
+      .form-item:first-child {
+        margin-top: 0;
+      }
+      .form-item {
+        position: relative;
+        margin-top: 12px;
+      }
+      .form-item label.title {
+          position: absolute;
+          left: 20px;
+          top: 19px;
+          display: block;
+          transition: all 0.2s ease;
+          pointer-events: none;
+          font-size: 15px;
+          font-weight: 600;
+          color: #94949a;
+      }
+      .form-item input:focus ~ .title {
+        font-size: 11px;
+        top: 9px;
+        color: #03c75a;
+      }
+      .btn-wrap {
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+      }
+      .btn-type {
+        background: #03c75a;
+        color: #fff;
+        max-width: 100%;
+        
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        height: 56px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        width: 100%;
+        transition: background 0.2s ease;
+        box-sizing: border-box;
+      }
+      .section-login .login-wrap .form-box .form-bottom {
+        margin-top: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      input[type=text]:focus, input[type=number]:focus, input[type=password]:focus, input[type=tel]:focus {
+        border-color: #b8ffc5;
+        background: #e8ffef;
+        outline: none;
+        color: #111;
+      }
+      input[type=text], input[type=submit], input[type=password], input[type=search], input[type=number], input[type=reset], input[type=email], input[type=tel], input[type=search], input[type=file], input[type=email], input[type=tel] {
+        height: 56px;
+        padding: 0 20px;
+        border: 1px solid #efefef;
+        background: #f4f4f4;
+        color: #111;
+        border-radius: 12px;
+      }
+
+
+      .form-bottom {
+        margin-top: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .chk-box:first-child {
+        margin-left: 0;
+      }
+      .chk-box {
+        display: inline-block;
+        text-align: left;
+      }
+      .chk-box input[type=checkbox], .chk-box input[type=radio] {
+        display: none;
+      }
+      input[type=checkbox] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -o-appearance: none;
+        appearance: none;
+      }
+      .chk-box .checkbox {
+        display: inline-block;
+        position: relative;
+        width: 24px;
+        min-width: 24px;
+        height: 24px;
+        margin-right: 6px;
+        border: 1px solid #94949a;
+        background-color: #fff;
+        border-radius: 5px;
+      }
+      .chk-box input[type=checkbox] + .checkbox:before {
+        transform: translate(6px, 9px) rotate(45deg);
+        transition-delay: 100ms;
+      }
+      .chk-box input[type=checkbox] + .checkbox:after {
+        transform: translate(10px, 14px) rotate(-53deg);
+        transition-delay: 0ms;
+      }
+      .chk-box label {
+        cursor: pointer;
+        vertical-align: middle;
+        font-size: 16px;
+      }
+      .list-type2 {
+        font-size: 0;
+        margin-bottom: 0;
+      }
+      ol, ul {
+        list-style: none;
+      }
+      .list-type2 li {
+        display: inline-flex;
+        align-items: center;
+        position: relative;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+      .list-type2 li a {
+        font-size: 16px;
+      }
+      .list-type2 li + li {
+        padding-left: 9px;
+        margin-left: 9px;
+      }
+      .list-type2 li + li:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        margin-top: -6px;
+        left: 0;
+        width: 1px;
+        height: 13px;
+        background: #e3e3e3;
+      }
+      ::before, ::after {
+        box-sizing: border-box;
+      }
+      .tooltip {
+        background: #fff;
+        border-radius: 20px;
+        padding: 10px 16px;
+        box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.12);
+        margin-bottom: 10px;
+        position: relative;
+        display: inline-block;
+        font-size: 13px;
+      }
+      .sns-box ul li {
+        display: inline-block;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      select, input, textarea {
+        width: 100%;
+        vertical-align: middle;
+        box-shadow: none;
+        border-radius: 0;
+        outline: none;
+        border: 0;
+        font-family: "SUIT", sans-serif;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        font-weight: 600;
+        font-size: 15px;
+        color: inherit;
+      }
+
+  </style>
+</head>
+<body>
+  <!--헤더공통영역-->
+  <th:block th:replace="~{common/header :: header}"></th:block>
+  <main>
+    <!--로그인-->
+    <div id="container">
+      <section id="content" class="section-login">
+        <div class="inner">
+          <div class="page-header t-c">
+            <h2 class="page-title v2">로그인</h2>
+            <p class="sub-title">로그인하시고 '트립조이'의 다양한 서비스를 이용하세요</p>
+          </div>
+          <div class="login-wrap">
+            <div class="form-box">
+              <div class="form-item">
+                <input type="text" placeholder="&nbsp;" id="userId" name="userId" autocomplete="off">
+                <label for="username" class="title">아이디</label>
+              </div>
+              <div class="form-item">
+                <input type="password" placeholder="&nbsp;" id="password" name="password" autocomplete="off">
+                <label for="password" class="title">비밀번호</label>
+                <i class="ico-eye"></i>
+              </div>
+              <div class="btn-wrap">
+                <a href="javascript:void(0);" class="btn-type full" id="aBtnLogin">로그인</a>
+              </div>
+              <div class="form-bottom">
+                <div class="chk-box">
+                  <input type="checkbox" id="saveId" name="saveId">
+                  <label class="checkbox" for="saveId"></label>
+                  <label for="saveId">아이디저장</label>
+                </div>
+                <div class="chk-box" id="divRememberMe" style="display: none;">
+                  <input type="checkbox" id="rememberMe" name="rememberMe">
+                  <label class="checkbox" for="rememberMe"></label>
+                  <label for="rememberMe">자동로그인</label>
+                </div>
+                <ul class="list-type2 pcWrap">
+                  <li><a href="/user/find/loginInfo?find=id">아이디 찾기</a></li>
+                  <li><a href="/user/find/loginInfo?find=pw">비밀번호 찾기</a></li>
+                </ul>
+              </div>
+
+              <div class="form-bottom mobileWrap" style="display: none;">
+                <ul class="list-type2">
+                  <li><a href="/user/find/loginInfo?find=id">아이디 찾기</a></li>
+                  <li><a href="/user/find/loginInfo?find=pw">비밀번호 찾기</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="sns-box">
+              <div class="tooltip">
+                <p>SNS 간편로그인</p>
+              </div>
+              <ul>
+                <li>
+                  <a href="javascript:void(0);" id="google_login" onclick="snsLogin('google')"><i class="ico-sns"></i></a>
+                </li>
+                <li>
+                  <a href="javascript:void(0);" id="naver_login" onclick="snsLogin('naver')"><i class="ico-sns2"></i></a>
+                </li>
+                <li>
+                  <a href="javascript:void(0);" id="kakao_login" onclick="snsLogin('kakao')"><i class="ico-sns3"></i></a>
+                </li>
+              </ul>
+            </div>
+            <div class="btn-wrap" id="joinWrap">
+              <a href="/member/join" class="btn-type4" id="joinTxt">회원가입<i class="ico-plus"></i></a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+
+
+  <!--footer공통영역-->
+  <th:block th:replace="~{common/footer :: footer}"></th:block>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+</body>
+</html>

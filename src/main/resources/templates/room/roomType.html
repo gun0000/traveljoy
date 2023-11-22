@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>트립조이-더보기</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link rel="stylesheet" th:href="@{/css/font.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+  <style>
+      .room-item{
+        width: 295.5px;
+        margin: 5px;
+        padding-right: 0px;
+        padding-left: 0px;
+      }
+      .justify-content-evenly {
+        justify-content: center !important;
+      }
+  </style>
+</head>
+<body>
+  <!--헤더공통영역-->
+  <th:block th:replace="~{common/header :: header}"></th:block>
+  <main>
+    <!--더보기화면-->
+    <section class="py-5">
+      <div class="container px-4 px-lg-5 mt-5">
+          <p class="page-title">지역,테마,인기숙소</p>
+          <!--필터부분--><!--인기숙소이면 필터없음-->
+          <div class="filter-wrap">
+            <ul class="js_toggle2">
+              <div id="hashTagListBox">
+                <li id="tag_all" class="active"><a href="javascript:setHashTagBySearch('all')">서울</a></li>
+                <li id="tag_109" class="hashTagVal"><a href="javascript:setHashTagBySearch('109')">대전</a></li>
+                <li id="tag_113" class="hashTagVal"><a href="javascript:setHashTagBySearch('113')">광주</a></li>
+                <li id="tag_106" class="hashTagVal"><a href="javascript:setHashTagBySearch('106')">부산</a></li>
+              </div>
+            </ul>
+            <a href="javascript:void(0)" class="btn-open"></a>
+          </div>
+          
+          <div class="">          
+            <!-- 다른 아이템들 -->
+            <div class="container ">
+              <div class="row row-cols-3 row-cols-sm-3 row-cols-md-3 room-item-container justify-content-evenly" >
+                <!-- 아이템 -->
+                <div class="room-item">
+                  <a href="">
+                    <!--아이템 이미지-->
+                    <div>
+                      <img class="room-item-img" src="/images/test.jpg" alt="">
+                    </div>
+                    <!--아이템 내용-->
+                    <div class="room-item-content">
+                      <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                      <div class="room-item-score-review">
+                        <div class="room-item-score">
+                          <span>4.3</span>
+                          <span>/</span>
+                          <span>5</span>
+                        </div>
+                        <div class="room-item-review">
+                          이용자 리뷰 1,171개
+                        </div>
+                      </div>
+                      <div class="room-item-price">
+                        63,342원
+                      </div>
+                    </div>
+                  </a>
+                </div>
+                <!-- 아이템 -->
+                <div class="room-item">
+                  <a href="">
+                    <!--아이템 이미지-->
+                    <div>
+                      <img class="room-item-img" src="/img/test.jpg" alt="">
+                    </div>
+                    <!--아이템 내용-->
+                    <div class="room-item-content">
+                      <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                      <div class="room-item-score-review">
+                        <div class="room-item-score">
+                          <span>4.3</span>
+                          <span>/</span>
+                          <span>5</span>
+                        </div>
+                        <div class="room-item-review">
+                          이용자 리뷰 1,171개
+                        </div>
+                      </div>
+                      <div class="room-item-price">
+                        63,342원
+                      </div>
+                    </div>
+                  </a>
+                </div>
+                <!-- 아이템 -->
+                <div class="room-item">
+                  <a href="">
+                    <!--아이템 이미지-->
+                    <div>
+                      <img class="room-item-img" src="/img/test.jpg" alt="">
+                    </div>
+                    <!--아이템 내용-->
+                    <div class="room-item-content">
+                      <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                      <div class="room-item-score-review">
+                        <div class="room-item-score">
+                          <span>4.3</span>
+                          <span>/</span>
+                          <span>5</span>
+                        </div>
+                        <div class="room-item-review">
+                          이용자 리뷰 1,171개
+                        </div>
+                      </div>
+                      <div class="room-item-price">
+                        63,342원
+                      </div>
+                    </div>
+                  </a>
+                </div>
+                <!-- 아이템 -->
+                <div class="room-item">
+                  <a href="">
+                    <!--아이템 이미지-->
+                    <div>
+                      <img class="room-item-img" src="/img/test.jpg" alt="">
+                    </div>
+                    <!--아이템 내용-->
+                    <div class="room-item-content">
+                      <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                      <div class="room-item-score-review">
+                        <div class="room-item-score">
+                          <span>4.3</span>
+                          <span>/</span>
+                          <span>5</span>
+                        </div>
+                        <div class="room-item-review">
+                          이용자 리뷰 1,171개
+                        </div>
+                      </div>
+                      <div class="room-item-price">
+                        63,342원
+                      </div>
+                    </div>
+                  </a>
+
+
+              </div>
+            </div>
+          </div>
+      </div>
+    </section>
+
+
+
+
+  </main>
+
+  <!--footer공통영역-->
+  <th:block th:replace="~{common/footer :: footer}"></th:block>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  </body>
+</html>

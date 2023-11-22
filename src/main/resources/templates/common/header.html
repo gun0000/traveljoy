@@ -1,0 +1,35 @@
+<header class="p-3 mb-3 border-bottom" th:fragment="header" xmlns:th="http://www.thymeleaf.org">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+                <img src="/images/logo.png" alt="로고" width="200px">
+            </a>
+            <ul class="header-list nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="/room/region" class="nav-link px-2 link-body-emphasis">지역</a></li>
+                <li><a href="/room/theme" class="nav-link px-2 link-body-emphasis">테마</a></li>
+                <li><a href="/room/popular" class="nav-link px-2 link-body-emphasis">인기숙소</a></li>
+                <li><a href="#" class="nav-link px-2 link-body-emphasis">고객센터</a></li>
+            </ul>
+            <div class="form-search">
+                <input type="text" placeholder="여행지, 명소, 호텔 등으로 검색" id="searchKeywordParam">
+                <button class="btn-search" onclick="location.href='/room/search'">
+                    <i class="ico-search"></i>
+                    <span class="hidden">검색</span>
+                </button>
+            </div>
+            <div><a href="/member/login">로그인</a></div>
+            <div class="dropdown text-end">
+                <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="/images/basicuser.svg" alt="mdo" width="32" height="32" class="rounded-circle">
+                </a>
+                <ul class="dropdown-menu text-small" style="">
+                    <li><a class="dropdown-item" href="/member/memberMyPage">내정보</a></li>
+                    <li><a class="dropdown-item" href="/member/memberMyPageReservationDetails">예약정보</a></li>
+                    <li><a class="dropdown-item" href="/admin/main">관리자페이지</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">로그아웃</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>

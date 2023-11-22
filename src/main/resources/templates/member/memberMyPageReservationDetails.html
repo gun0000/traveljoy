@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/font.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+  <style>
+      *{outline: 1px solid #f00;}
+  </style>
+</head>
+<body>
+  <!--헤더공통영역-->
+  <th:block th:replace="~{common/header :: header}"></th:block>
+  <main>
+    <!--결제후 결제내역 화면-->
+    <section class="py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-3">
+            <div class="box border p-4">내 정보</div>
+            <div class="box border p-4">예약 내역</div>
+            <div class="box border p-4">문의 내역</div>
+          </div>
+          <div class="col-9">
+            <div class="box"> 
+              <h2>예약내역</h2>
+              <!--예약내역 내역 하나-->
+              <div class="mt-4 border">
+                <div class="row">
+                  
+                  <div class="col-2">
+                        <img class="img-fluid rounded" src="https://dummyimage.com/150x150/ced4da/6c757d.jpg" alt="...">
+                  </div>
+
+                  <div class="col-5">
+                    <p>숙소이름 :</p>
+                    <p>예약자 이름 : 홍길동</p>
+                    <p>총 결제 금액 : 200,000원</p>
+                  </div>
+
+                  <div class="col-5">
+                    <p>결제됨</p>
+                    <div><button>문의하기</button></div>
+                    <div><button>리뷰하기</button></div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <p>가는날: 날짜</p>
+                  </div>
+                  <div class="col-6">
+                    <p>오는날: 날짜</p>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+
+  </main>
+
+  <!--footer공통영역-->
+  <th:block th:replace="~{common/footer :: footer}"></th:block>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+</body>
+</html>

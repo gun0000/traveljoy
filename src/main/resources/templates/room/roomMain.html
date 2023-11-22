@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>트립조이-메인페이지</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+    <!-- 슬라이더 css -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    <style>
+
+        /*슬라이더부분*/
+        .swiper-container {
+            position: relative;
+            overflow: hidden; /* 추가 */
+        }
+
+        .swiper-button-next, .swiper-button-prev {
+            position: absolute;
+            top: 62%;
+            width: auto;
+            transform: translateY(-50%);
+            color: #000;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 20px;
+        }
+
+        .swiper-button-next {
+            right: -5%;
+        }
+
+        .swiper-button-prev {
+            left: -5%;
+        }
+        /*슬라이더부분-end*/
+
+
+
+    </style>
+</head>
+<body>
+<!--헤더공통영역-->
+<th:block th:replace="~{common/header :: header}"></th:block>
+<main>
+    <!--지역-->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <p class="page-title">지역</p>
+            <!--필터부분-->
+            <div class="filter-wrap">
+                <ul class="js_toggle2">
+                    <div id="hashTagListBox">
+                        <li id="tag_all" class="active"><a href="javascript:setHashTagBySearch('all')">서울</a></li>
+                        <li id="tag_109" class="hashTagVal"><a href="javascript:setHashTagBySearch('109')">대전</a></li>
+                        <li id="tag_113" class="hashTagVal"><a href="javascript:setHashTagBySearch('113')">광주</a></li>
+                        <li id="tag_106" class="hashTagVal"><a href="javascript:setHashTagBySearch('106')">부산</a></li>
+                    </div>
+                </ul>
+                <a href="javascript:void(0)" class="btn-open"></a>
+            </div>
+            <div class="room-item-container">
+                <!-- 다른 아이템들 -->
+                <div class="swiper-container" id="swiper1">
+                    <div class="swiper-wrapper">
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <a href="/room/detail">
+                                <!--아이템 이미지-->
+                                <div>
+                                    <img class="room-item-img" src="/images/test.jpg" alt="">
+                                </div>
+                                <!--아이템 내용-->
+                                <div class="room-item-content">
+                                    <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                    <div class="room-item-score-review">
+                                        <div class="room-item-score">
+                                            <span>4.3</span>
+                                            <span>/</span>
+                                            <span>5</span>
+                                        </div>
+                                        <div class="room-item-review">
+                                            이용자 리뷰 1,171개
+                                        </div>
+                                    </div>
+                                    <div class="room-item-price">
+                                        63,342원
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 페이징 네비게이션 추가 (선택사항) -->
+                    <div class="swiper-pagination"></div>
+                </div>
+                <!-- 네비게이션 버튼 추가 (선택사항) -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+            <div class="btn-more">
+                <button type="button" class="btn btn-primary" onclick="location.href='/room/region'">더보기</button>
+            </div>
+        </div>
+    </section>
+    <!--테마-->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <p class="page-title">테마</p>
+            <!--필터부분-->
+            <div class="filter-wrap">
+                <ul class="js_toggle2">
+                    <div id="hashTagListBox">
+                        <li id="tag_all" class="active"><a href="javascript:setHashTagBySearch('all')">서울</a></li>
+                        <li id="tag_109" class="hashTagVal"><a href="javascript:setHashTagBySearch('109')">대전</a></li>
+                        <li id="tag_113" class="hashTagVal"><a href="javascript:setHashTagBySearch('113')">광주</a></li>
+                        <li id="tag_106" class="hashTagVal"><a href="javascript:setHashTagBySearch('106')">부산</a></li>
+                    </div>
+                </ul>
+                <a href="javascript:void(0)" class="btn-open"></a>
+            </div>
+
+            <div class="room-item-container">
+                <!-- 다른 아이템들 -->
+                <div class="swiper-container" id="swiper2">
+                    <div class="swiper-wrapper">
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <a href="">
+                                <!--아이템 이미지-->
+                                <div>
+                                    <img class="room-item-img" src="/images/test.jpg" alt="">
+                                </div>
+                                <!--아이템 내용-->
+                                <div class="room-item-content">
+                                    <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                    <div class="room-item-score-review">
+                                        <div class="room-item-score">
+                                            <span>4.3</span>
+                                            <span>/</span>
+                                            <span>5</span>
+                                        </div>
+                                        <div class="room-item-review">
+                                            이용자 리뷰 1,171개
+                                        </div>
+                                    </div>
+                                    <div class="room-item-price">
+                                        63,342원
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 페이징 네비게이션 추가 (선택사항) -->
+                    <div class="swiper-pagination"></div>
+                </div>
+                <!-- 네비게이션 버튼 추가 (선택사항) -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+            <div class="btn-more">
+                <button type="button" class="btn btn-primary">더보기</button>
+            </div>
+        </div>
+    </section>
+    <!--인기숙소-->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <p class="page-title">인기숙소</p>
+            <div class="room-item-container">
+                <!-- 다른 아이템들 -->
+                <div class="swiper-container" id="swiper3">
+                    <div class="swiper-wrapper">
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <a href="">
+                                <!--아이템 이미지-->
+                                <div>
+                                    <img class="room-item-img" src="/images/test.jpg" alt="">
+                                </div>
+                                <!--아이템 내용-->
+                                <div class="room-item-content">
+                                    <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                    <div class="room-item-score-review">
+                                        <div class="room-item-score">
+                                            <span>4.3</span>
+                                            <span>/</span>
+                                            <span>5</span>
+                                        </div>
+                                        <div class="room-item-review">
+                                            이용자 리뷰 1,171개
+                                        </div>
+                                    </div>
+                                    <div class="room-item-price">
+                                        63,342원
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 페이징 네비게이션 추가 (선택사항) -->
+                    <div class="swiper-pagination"></div>
+                </div>
+                <!-- 네비게이션 버튼 추가 (선택사항) -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+            <div class="btn-more">
+                <button type="button" class="btn btn-primary">더보기</button>
+            </div>
+        </div>
+    </section>
+    <!--최근 본 숙소-->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <p class="page-title">최근 본 숙소</p>
+            <div class="room-item-container">
+                <!-- 다른 아이템들 -->
+                <div class="swiper-container" id="swiper4">
+                    <div class="swiper-wrapper">
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <a href="">
+                                <!--아이템 이미지-->
+                                <div>
+                                    <img class="room-item-img" src="/images/test.jpg" alt="">
+                                </div>
+                                <!--아이템 내용-->
+                                <div class="room-item-content">
+                                    <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                    <div class="room-item-score-review">
+                                        <div class="room-item-score">
+                                            <span>4.3</span>
+                                            <span>/</span>
+                                            <span>5</span>
+                                        </div>
+                                        <div class="room-item-review">
+                                            이용자 리뷰 1,171개
+                                        </div>
+                                    </div>
+                                    <div class="room-item-price">
+                                        63,342원
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 슬라이드 아이템들 -->
+                        <div class="swiper-slide room-item">
+                            <!--아이템 이미지-->
+                            <div>
+                                <img class="room-item-img" src="/images/test.jpg" alt="">
+                            </div>
+                            <!--아이템 내용-->
+                            <div class="room-item-content">
+                                <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
+                                <div class="room-item-score-review">
+                                    <div class="room-item-score">
+                                        <span>4.3</span>
+                                        <span>/</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="room-item-review">
+                                        이용자 리뷰 1,171개
+                                    </div>
+                                </div>
+                                <div class="room-item-price">
+                                    63,342원
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 페이징 네비게이션 추가 (선택사항) -->
+                    <div class="swiper-pagination"></div>
+                </div>
+                <!-- 네비게이션 버튼 추가 (선택사항) -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+            <div class="btn-more">
+                <button type="button" class="btn btn-primary">더보기</button>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!--footer공통영역-->
+<th:block th:replace="~{common/footer :: footer}"></th:block>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+<!-- 슬라이더 자바스크립트 -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    document.querySelectorAll('.swiper-container').forEach(function(containerEl) {
+        new Swiper(containerEl, {
+            slidesPerView: 4,
+            spaceBetween: 10,
+            navigation: {
+                nextEl: containerEl.nextElementSibling,
+                prevEl: containerEl.nextElementSibling.nextElementSibling,
+            },
+            breakpoints: {
+                1200: {
+                    slidesPerView: 4,
+                    spaceBetween: 10
+                },
+                800: {
+                    slidesPerView: 2,
+                    spaceBetween: 10
+                },
+                600: {
+                    slidesPerView: 1,
+                    spaceBetween: 10
+                }
+            }
+        });
+    });
+</script>
+<!--
+  <script>
+    var swiper = new Swiper('.swiper-container', {
+      slidesPerView: 4, // 한 번에 보여줄 슬라이드 아이템의 수
+      spaceBetween: 10, // 슬라이드 아이템 간의 간격 (px)
+      navigation: {
+        nextEl: '.swiper-button-next', // 다음 버튼의 선택자
+        prevEl: '.swiper-button-prev', // 이전 버튼의 선택자
+      },
+      breakpoints: {
+         // 화면 크기 1200px 이하에서는 슬라이드 아이템 4개 보여주기
+        1200: { slidesPerView: 4, spaceBetween: 10 },
+         // 화면 크기 800px 이하에서는 슬라이드 아이템 2개 보여주기
+        800: { slidesPerView: 2, spaceBetween: 10 },
+         // 화면 크기 600px 이하에서는 슬라이드 아이템 1개 보여주기
+        600: { slidesPerView: 1, spaceBetween: 10 }
+      }
+    });
+  </script>
+-->
+
+
+
+</body>
+</html>
