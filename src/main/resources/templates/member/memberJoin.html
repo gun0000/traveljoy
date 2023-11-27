@@ -8,6 +8,7 @@
   <link rel="icon" href="/static/assets/favicons/favicon.png">
   <link rel="stylesheet" type="text/css" th:href="@{/css/font.css}">
   <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
       *{}
       body{
@@ -64,6 +65,10 @@
           font-size: 11px;
           top: 9px;
           color: #94949a;
+        }
+        .form-item .invalid-feedback {
+          margin-top: 10px;
+          font-size: 15px;
         }
         .btn-type full{
           max-width: 100%;
@@ -125,6 +130,14 @@
         font-size: 11px;
         top: 9px;
         color: #03c75a;
+      }
+      .form-item .invalid-feedback {
+        margin-top: 6px;
+        color: #f0543a;
+        font-size: 14px;
+        line-height: 1.7;
+        padding: 0 20px;
+        text-align: left;
       }
       .btn-wrap {
         margin-top: 30px;
@@ -286,6 +299,9 @@
         font-size: 15px;
         color: inherit;
       }
+      #emailVerification {
+        display: none;
+      }
 
   </style>
 </head>
@@ -299,41 +315,49 @@
         <div class="inner">
           <div class="page-header t-c">
             <h2 class="page-title v2">회원가입</h2>
-            <p class="sub-title">회원가입하시고 ''의 다양한 서비스를 이용하세요</p>
+            <p class="sub-title">회원가입하시고 '트립조이'의 다양한 서비스를 이용하세요</p>
           </div>
           <div class="login-wrap">
-            <div class="form-box">
-              <div class="form-item">
-                <input type="text" placeholder="&nbsp;" id="userId" name="userId" autocomplete="off">
-                <label for="username" class="title">아이디</label>
+            <form th:action="@{/member/join}" th:object="${MemberJoinDto}" method="post">
+              <div class="form-box">
+                <div class="form-item">
+                  <input type="text" th:field="*{memberId}" placeholder="&nbsp;" id="memberId" name="memberId" autocomplete="off" required>
+                  <label for="memberId" class="title">아이디</label>
+                  <span class="invalid-feedback">
+                    <span id="userIdFeedback_1" style="display:none;">이미 존재하는 아이디 입니다.<br></span>
+                    <span id="userIdFeedback_2" style="display:none;">영문, 숫자 6~16자리를 입력해주세요.</span>
+                    <span id="userIdFeedback_3" style="display:none;">영문, 숫자만 사용 가능합니다.<br></span>
+                  </span>
+                </div>
+                <div class="form-item">
+                  <input type="password" th:field="*{memberPwd}" placeholder="&nbsp;" id="memberpwd" name="memberpwd" autocomplete="off" required>
+                  <label for="memberpwd" class="title">비밀번호</label>
+                  <span class="invalid-feedback">
+                    <span id="userPwFeedback_1" style="display:none;">영문, 숫자, 특수문자 외의 문자는 사용이 불가능합니다.<br></span>
+                    <span id="userPwFeedback_2" style="display:none;">영문, 숫자, 특수문자를 포함하여 8~16자리로 입력해주세요.<br></span>
+                    <span id="userPwFeedback_3" style="display:none;">빈값(띄어쓰기)는 불가능합니다.<br></span>
+                  </span>
+                </div>
+                <div class="form-item">
+                  <input type="password" placeholder="&nbsp;" id="memberpwdcheck" name="memberpwdcheck" autocomplete="off" required>
+                  <label for="memberpwdcheck" class="title">비밀번호 확인</label>
+                </div>
+                <div class="form-item">
+                  <input type="text" th:field="*{email}" placeholder="&nbsp;" id="email" name="email" autocomplete="off" required>
+                  <label for="email" class="title">이메일</label>
+                </div>
+                <div class="btn-wrap" style="cursor: pointer;">
+                  <a  class="btn-type full" id="sendCode">이메일 인증코드 보내기</a>
+                </div>
+                <div class="form-item">
+                  <input type="text" placeholder="&nbsp;" id="emailVerification" name="verificationCode" autocomplete="off" required>
+                  <label for="emailVerification" class="title">이메일인증</label>
+                </div>
+                <div class="btn-wrap">
+                  <button type="submit" class="btn-type full" id="aBtnLogin">회원가입</button>
+                </div>
               </div>
-              <div class="form-item">
-                <input type="password" placeholder="&nbsp;" id="password" name="password" autocomplete="off">
-                <label for="password" class="title">비밀번호</label>
-                <i class="ico-eye"></i>
-              </div>
-              <div class="form-item">
-                <input type="password" placeholder="&nbsp;" id="password" name="password" autocomplete="off">
-                <label for="password" class="title">비밀번호 확인</label>
-                <i class="ico-eye"></i>
-              </div>
-              <div class="form-item">
-                <input type="password" placeholder="&nbsp;" id="password" name="password" autocomplete="off">
-                <label for="password" class="title">이메일</label>
-                <i class="ico-eye"></i>
-              </div>
-              <div class="btn-wrap">
-                <a href="javascript:void(0);" class="btn-type full" id="aBtnLogin">이메일 인증코드 보내기</a>
-              </div>
-              <div class="form-item">
-                <input type="password" placeholder="&nbsp;" id="password" name="password" autocomplete="off">
-                <label for="password" class="title">이메일인증</label>
-                <i class="ico-eye"></i>
-              </div>
-              <div class="btn-wrap">
-                <a href="javascript:void(0);" class="btn-type full" id="aBtnLogin">회원가입</a>
-              </div>
-            </div>
+            </form>
           </div>
         </div>
       </section>
@@ -345,6 +369,90 @@
   <!--footer공통영역-->
   <th:block th:replace="~{common/footer :: footer}"></th:block>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  <script>
+    $("#memberId").blur(function() {
+      var memberId = $(this).val();
+      var memberIdRegex = /^[a-zA-Z0-9]{6,16}$/;
+      var invalidFeedback = $(this).siblings(".invalid-feedback");
+
+      // 아이디 필드가 비어있는 경우
+      if (!memberId) {
+        invalidFeedback.hide();
+        return;
+      }
+
+      // 아이디가 영문과 숫자로 구성되지 않은 경우
+      if (!memberId.match(memberIdRegex)) {
+        invalidFeedback.show();
+        $("#userIdFeedback_2").hide();
+        $("#userIdFeedback_3").show();
+        return;
+      }
+
+      // 아이디의 길이가 6~16자리가 아닌 경우
+      if (memberId.length < 6 || memberId.length > 16) {
+        invalidFeedback.show();
+        $("#userIdFeedback_3").hide();
+        $("#userIdFeedback_2").show();
+        return;
+      }
+
+      // 서버에 요청하여 아이디가 이미 존재하는지 확인
+      $.ajax({
+        url: '/member/checkId',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ memberId: memberId }),
+        success: function(data) {
+          if (data.result) { // 이미 존재하는 아이디인 경우
+            invalidFeedback.show();
+            $("#userIdFeedback_2").hide();
+            $("#userIdFeedback_3").hide();
+            $("#userIdFeedback_1").show();
+          } else { // 사용 가능한 아이디인 경우
+            invalidFeedback.hide();
+          }
+        }
+      });
+    });
+
+  </script>
+  <script>
+    $(document).ready(function(){
+      $("#sendCode").click(function() {
+        var email = $("#email").val();
+        var emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+
+        if (!email) {
+          alert("이메일을 입력해주세요.");
+          return;
+        }
+
+        if (!email.match(emailRegex)) {
+          alert("유효한 이메일 주소를 입력해주세요.");
+          return;
+        }
+        // 이메일 필드 잠금
+        $('#email').prop('readonly', true);
+        // 이메일 인증 필드 보이기
+        $('#emailVerification').show();
+
+        $.ajax({
+          url: '/member/sendVerificationCode',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({ email: email }),
+          success: function(response) {
+            console.log(response);
+            alert("인증 코드가 이메일로 보내졌습니다.");
+          },
+          error: function() {
+            alert("인증 코드 요청에 실패했습니다.");
+          }
+        });
+      });
+    });
+  </script>
 
 </body>
 </html>

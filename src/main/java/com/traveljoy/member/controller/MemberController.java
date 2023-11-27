@@ -1,15 +1,15 @@
 package com.traveljoy.member.controller;
 
-import com.traveljoy.member.dto.EmailVerificationCodeDTO;
+import com.traveljoy.member.dto.CheckIdDto;
+import com.traveljoy.member.dto.EmailVerificationCodeDto;
+import com.traveljoy.member.dto.MemberJoinDto;
 import com.traveljoy.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @Validated
@@ -21,14 +21,27 @@ public class MemberController {
 
     //회원가입 페이지
     @GetMapping("/join")
-    public String join(){
+    public String join(Model model){
+        model.addAttribute("MemberJoinDto", new MemberJoinDto());
         return "member/memberJoin";
+    }
+    //회원가입
+    @PostMapping("/join")
+    public String joinPost(@ModelAttribute("MemberJoinDto") MemberJoinDto memberJoinDto){
+        memberService.join(memberJoinDto);
+        return "redirect:/room/main";
+    }
+    //아이디중복검사
+    @ResponseBody
+    @PostMapping("/checkId")
+    public CheckIdDto checkDuplicateId(@RequestBody CheckIdDto checkIdDto) {
+        boolean result = memberService.checkDuplicateId(checkIdDto.getMemberId());
+        checkIdDto.setResult(result);
+        return checkIdDto;
     }
     //이메일인증 인증코드발송
     @PostMapping("/sendVerificationCode")
-    public ResponseEntity<Void> sendVerificationCode(@RequestBody EmailVerificationCodeDTO emailDTO) {
-        System.out.printf(""+emailDTO);
-        System.out.printf(""+emailDTO.getEmail());
+    public ResponseEntity<Void> sendVerificationCode(@RequestBody EmailVerificationCodeDto emailDTO) {
         memberService.sendVerificationCode(emailDTO.getEmail());
         return ResponseEntity.ok().build();
     }
@@ -38,6 +51,11 @@ public class MemberController {
     @GetMapping("/login")
     public String login(){
         return "member/memberLogin";
+    }
+    @PostMapping("/login")
+    public String loginPost(){
+
+        return "redirect:/room/main";
     }
     //로그아웃
     @PostMapping("/logout")

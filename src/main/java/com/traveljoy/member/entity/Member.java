@@ -28,7 +28,7 @@ public class Member extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     //이름
-    @Column(nullable = false)
+    @Column()
     private String name;
     //아이디
     @Column(nullable = false, unique = true)
@@ -98,14 +98,11 @@ public class Member extends BaseTimeEntity {
         this.profileImage = newImage;
     }
     @Builder
-    public Member(Long id, String name, String memberId, String memberPwd, String email, MemberStatus memberStatus, MemberRole memberRole, MemberLoginType memberLoginType) {
+    public Member(Long id, String name, String memberId, String memberPwd, String email) {
         this.id = id;
         this.name = name;
         this.memberId = memberId;
         this.memberPwd = memberPwd;
         this.email = email;
-        this.memberStatus = memberStatus;
-        this.memberRole = memberRole;
-        this.memberLoginType = memberLoginType;
     }
 }

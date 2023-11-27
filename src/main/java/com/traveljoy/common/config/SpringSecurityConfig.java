@@ -26,7 +26,7 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(request -> request
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
                         //로그인하지 않아도 들어갈 수 있거나 보여야할 예외
@@ -36,11 +36,11 @@ public class SpringSecurityConfig {
                 //.formLogin(AbstractHttpConfigurer::disable)
                 .formLogin(login -> login	// form 방식 로그인 사용
                         .loginPage("/member/login")	// [A] 커스텀 로그인 페이지 지정
-                        .loginProcessingUrl("/login-process")	// [B] submit 받을 url
-                        .usernameParameter("userid")	// [C] submit할 아이디
-                        .passwordParameter("pw")	// [D] submit할 비밀번호
-                        .defaultSuccessUrl("/view/dashboard", true)	// 성공 시 dashboard로
-                        .permitAll()	// 대시보드 이동이 막히면 안되므로 얘는 허용
+                        .loginProcessingUrl("/member/loginProcess")	// [B] submit 받을 url
+                        .usernameParameter("memberId")	// [C] submit할 아이디
+                        .passwordParameter("memberPwd")	// [D] submit할 비밀번호
+                        .defaultSuccessUrl("/room/main", true)	// 성공 시
+                        .permitAll()	// 이동이 막히면 안되므로 얘는 허용
                 )
                 .logout(withDefaults());    // 로그아웃은 기본설정으로 (/logout으로 인증해제)
 

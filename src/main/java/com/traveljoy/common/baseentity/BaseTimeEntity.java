@@ -5,6 +5,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -18,11 +19,9 @@ public abstract class BaseTimeEntity {
     @Column(name = "CREATED_AT", updatable = false)
     private LocalDateTime createdAt;
 
-    @CreatedDate
+    @LastModifiedDate
     @Column(name = "MODIFIED_AT")
     private LocalDateTime modifiedAt;
 
-    public void isModifiedNow() {
-        this.modifiedAt = LocalDateTime.now();
-    }
+   // public void isModifiedNow() {this.modifiedAt = LocalDateTime.now();}
 }
