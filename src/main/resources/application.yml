@@ -4,6 +4,15 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+  sql:
+    init:
+      mode: always # 서버 시작시 항상 classpath의 sql문을 실행하도록 설정
+      data-locations: classpath:/data.sql
+      #schema-locations: classpath:/schema.sql
+
+      # .sql 파일을 classpath 하위로 두고, 특정 디렉토리 아래에서 실행시킬 수 있다.
+      # data-locations: classpath:db/h2/data.sql      # spring boot startup 시, 특정 경로의 data.sql 실행
+      # schema-locations: classpath:db/h2/schema.sql  # spring boot startup 시, 특정 경로의 schema.sql 실행
   thymeleaf:
     check-template-location: true
     prefix: classpath:/templates/
@@ -19,6 +28,7 @@ spring:
       hibernate:
       # show_sql: true
         format_sql: true
+    defer-datasource-initialization: true #옵션이 없다면 h2,mysql이 초기화돼서 DB에 테이블이 생성되는 것보다 data.sql을 통해 insert 되는 것이 먼저 일어나서 테이블을 찾을 수 없다는 에러가 발생합니다
 logging.level:
   org.hibernate.SQL: debug
 # org.hibernate.type: trace
