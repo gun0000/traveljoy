@@ -1,5 +1,6 @@
 package com.traveljoy.member.service;
 
+import com.sun.security.auth.UserPrincipal;
 import com.traveljoy.member.dto.MemberJoinDto;
 import com.traveljoy.member.entity.EmailVerificationCode;
 import com.traveljoy.member.entity.Member;
@@ -9,6 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +24,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class MemberServiceImpl implements MemberService {
+public class MemberServiceImpl implements MemberService, UserDetailsService {
     //레파지토리
     private final MemberRepository memberRepository;
     private final EmailVerificationCodeRepository emailVerificationCodeRepository;
+    //스프링시큐리티
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     //맵퍼
 
     //메일
@@ -60,9 +67,9 @@ public class MemberServiceImpl implements MemberService {
         }
 
         if(emailVerificationCode.getExpiryDate().isBefore(LocalDateTime.now())) {
-            emailVerificationCodeRepository.delete(emailVerificationCode);
             throw new IllegalArgumentException("인증 코드가 만료되었습니다.");
         }
+        emailVerificationCodeRepository.delete(emailVerificationCode);
     }
     //인증코드발송
     @Override
@@ -102,5 +109,13 @@ public class MemberServiceImpl implements MemberService {
         message.setText("인증코드는" + verificationCode + "입니다.");
 
         mailSender.send(message);
+    }
+
+    //로그인부분
+    @Override
+    public UserDetails loadUserByUsername(String memberId) throws UsernameNotFoundException {
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new UsernameNotFoundException(memberId));
+        return new MemberPrincipal(member); // MemberPrincipal UserDetails 인터페이스를 구현한 클래스
     }
 }

@@ -58,11 +58,11 @@ public class Member extends BaseTimeEntity {
     //회원권한
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private MemberRole memberRole = MemberRole.MEMBER_ROLE;
+    private MemberRole memberRole = MemberRole.ROLE_MEMBER;
 
     public enum MemberRole {
-        MEMBER_ROLE("회원"),
-        ADMIN_ROLE("관리자");
+        ROLE_MEMBER("ROLE_MEMBER"),
+        ROLE_ADMIN("ROLE_ADMIN");
 
         @Getter
         private String role;

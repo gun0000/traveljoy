@@ -1,11 +1,12 @@
 package com.traveljoy.common.config;
 
 import jakarta.servlet.DispatcherType;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -18,6 +19,8 @@ import java.util.Arrays;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SpringSecurityConfig {
 
     /*
@@ -40,6 +43,7 @@ public class SpringSecurityConfig {
                         .usernameParameter("memberId")	// [C] submit할 아이디
                         .passwordParameter("memberPwd")	// [D] submit할 비밀번호
                         .defaultSuccessUrl("/room/main", true)	// 성공 시
+                        .failureHandler(new CustomAuthenticationFailureHandler())//로그인 실패 시 스프링 시큐리티는 HTTP 상태 코드 401을 반환
                         .permitAll()	// 이동이 막히면 안되므로 얘는 허용
                 )
                 .logout(withDefaults());    // 로그아웃은 기본설정으로 (/logout으로 인증해제)

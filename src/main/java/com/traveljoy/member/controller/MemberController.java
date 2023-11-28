@@ -6,6 +6,7 @@ import com.traveljoy.member.dto.MemberJoinDto;
 import com.traveljoy.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -52,11 +53,6 @@ public class MemberController {
     public String login(){
         return "member/memberLogin";
     }
-    @PostMapping("/login")
-    public String loginPost(){
-
-        return "redirect:/room/main";
-    }
     //로그아웃
     @PostMapping("/logout")
     public String logout(){
@@ -68,11 +64,13 @@ public class MemberController {
 
 
     //내 정보,리뷰 페이지
+    @Secured({"ROLE_MEMBER","ROLE_ADMIN"})
     @GetMapping("/memberMyPage")
     public String memberMyPage(){
         return "member/memberMyPage";
     }
     //예약내역
+    @Secured({"ROLE_MEMBER","ROLE_ADMIN"})
     @GetMapping("/memberMyPageReservationDetails")
     public String memberMyPageReservationDetails(){
         return "member/memberMyPageReservationDetails";

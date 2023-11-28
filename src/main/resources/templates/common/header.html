@@ -17,19 +17,24 @@
                     <span class="hidden">검색</span>
                 </button>
             </div>
-            <div><a href="/member/login">로그인</a></div>
-            <div class="dropdown text-end">
-                <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="/images/basicuser.svg" alt="mdo" width="32" height="32" class="rounded-circle">
-                </a>
-                <ul class="dropdown-menu text-small" style="">
-                    <li><a class="dropdown-item" href="/member/memberMyPage">내정보</a></li>
-                    <li><a class="dropdown-item" href="/member/memberMyPageReservationDetails">예약정보</a></li>
-                    <li><a class="dropdown-item" href="/admin/main">관리자페이지</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">로그아웃</a></li>
-                </ul>
+            <div th:if="${#authentication.name == 'anonymousUser'}">
+                <a href="/member/login">로그인</a>
             </div>
+            <th:block th:if="${#authentication.name != 'anonymousUser'}">
+                <div th:text="${#authentication.name}"></div>
+                <div class="dropdown text-end">
+                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="/images/basicuser.svg" alt="mdo" width="32" height="32" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu text-small" style="">
+                        <li><a class="dropdown-item" href="/member/memberMyPage">내정보</a></li>
+                        <li><a class="dropdown-item" href="/member/memberMyPageReservationDetails">예약정보</a></li>
+                        <li th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}"><a class="dropdown-item" href="/admin/main">관리자페이지</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/logout">로그아웃</a></li>
+                    </ul>
+                </div>
+            </th:block>
         </div>
     </div>
 </header>
