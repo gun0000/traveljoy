@@ -28,6 +28,6 @@
 	font-family:"SUIT";
 	font-weight:700;
 	src:local("SUIT-Bold"),
-	url("../../assets/fonts/SUIT-Bold.woff2") format("woff2"),
-	url("../../assets/fonts/SUIT-Bold.opentype") format("opentype");
+	url("/css/fonts/SUIT-Bold.woff2") format("woff2"),
+	url("/css/fonts/SUIT-Bold.opentype") format("opentype");
 }
