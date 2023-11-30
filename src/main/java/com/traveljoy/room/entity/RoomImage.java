@@ -25,7 +25,7 @@ public class RoomImage extends BaseTimeEntity {
     private String image;
     //대표이미지여부
     @Column(nullable = false)
-    private boolean isMain;
+    private boolean isMain = false;
 
     @Builder
     public RoomImage(Long id, Room room, String image, boolean isMain){

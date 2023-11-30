@@ -33,7 +33,6 @@
             .form-item input {
             box-sizing: border-box;
             height: 64px;
-            font-size: 18px;
             padding: 0 20px;
             border: 1px solid #efefef;
             background: #f4f4f4;
@@ -161,12 +160,189 @@
                 font-size: 15px;
                 color: inherit;
             }
-
-
+            #description{
+                height: 300px;
+                padding: 40px 20px;
+                border: 1px solid #efefef;
+                background: #f4f4f4;
+                color: #111;
+                border-radius: 12px;
+                resize: none;
+            }
+            #description:focus {
+                border-color: #b8ffc5;
+                background: #e8ffef;
+                outline: none;
+                color: #111;
+            }
+            #findbutton{
+                background: #8f8f8f;
+                color: #fff;
+            }
+            #inputContainer{
+                padding: 40px 20px;
+                border: 1px solid #efefef;
+                background: #f4f4f4;
+                color: #111;
+                border-radius: 12px;
+            }
+            #imageUpload1{
+                margin-top: 20px;
+            }
 
 
 
         </style>
+        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+        <!-- 다음 우편번호 API 스크립트 -->
+        <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+        <!--카카오맵-->
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f4dd8fe5910ea0ebe66e44e68d2a7493&libraries=services,clusterer,drawing"></script>
+        <script>
+            function openAddressPopup() {
+                new daum.Postcode({
+                    oncomplete: function (data) {
+                        // 선택된 주소를 주소 입력란에 채우기
+                        document.getElementById('address').value = data.address;
+                        document.getElementById('address2').innerHTML = data.address;
+                        document.getElementById('roomAddress').value = data.address;
+                        // 주소로 위도, 경도 검색
+                        var geocoder = new kakao.maps.services.Geocoder();
+                        geocoder.addressSearch(data.address, function(result, status) {
+                            if (status === kakao.maps.services.Status.OK) {
+                                var position = new kakao.maps.LatLng(result[0].y, result[0].x);
+                                marker.setPosition(position);
+                                map.setCenter(position);
+                                // 위도, 경도 표시하기
+                                document.getElementById('latitude').value = result[0].y;
+                                document.getElementById('longitude').value = result[0].x;
+                                document.getElementById('position').innerHTML = "좌표: "+result[0].y+" , "+result[0].x+"";
+
+                            }
+                        });
+                    }
+                }).open();
+            }
+        </script>
+        <script>
+            var map;
+            var marker;
+
+            function initMap() {
+                // 사용자의 현재 위치를 가져옵니다.
+
+                var latitude = 37.56413895923679; // 위도
+                var longitude = 126.97718160053579; // 경도
+
+                var initialLatLng = new kakao.maps.LatLng(latitude, longitude);
+
+                var mapOptions = {
+                    center: initialLatLng,
+                    level: 2
+                };
+
+                // 지도 생성
+                map = new kakao.maps.Map(document.getElementById('map'), mapOptions);
+
+                // 마커 생성
+                marker = new kakao.maps.Marker({
+                    position: map.getCenter(),
+                    draggable: true // 마커를 드래그할 수 있도록 설정
+                });
+                marker.setMap(map);
+
+                // 주소를 좌표로 변환하는 Geocoder 객체 생성
+                var geocoder = new kakao.maps.services.Geocoder();
+
+                // 마커 생성 함수
+                function createMarker(address) {
+                    // 주소를 좌표로 변환
+                    geocoder.addressSearch(address, function(result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            var position = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                            // 마커 생성
+                            marker.setPosition(position);
+                            map.setCenter(position);
+                        }
+                    });
+                }
+
+                // 마커 드래그 이벤트 리스너 등록
+                kakao.maps.event.addListener(marker, 'dragend', function() {
+                    var position = marker.getPosition(); // 마커의 좌표를 가져옵니다.
+                    var latitude = position.getLat(); // 위도
+                    var longitude = position.getLng(); // 경도
+                    document.getElementById('latitude').value = latitude;
+                    document.getElementById('longitude').value = longitude;
+
+                    // 좌표를 주소로 변환
+                    geocoder.coord2Address(longitude, latitude, function(result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            if (result.length > 0) {
+                                var address = result[0].address.address_name;
+                                document.getElementById('address2').innerHTML = '현재 주소: ' + address;
+                                document.getElementById('position').innerHTML = '좌표: ' + latitude + ', ' + longitude;
+                            }
+                        }
+                    });
+                });
+
+                // 주소 값을 가져와서 마커를 생성합니다.
+                var address = document.getElementById('address').value;
+                createMarker(address);
+
+                // 지도 드래그 이벤트 리스너 등록
+                kakao.maps.event.addListener(map, 'dragend', function() {
+                    var centerLatLng = map.getCenter();
+                    marker.setPosition(centerLatLng);
+
+                    var latitude = centerLatLng.getLat();
+                    var longitude = centerLatLng.getLng();
+                    document.getElementById('latitude').value = latitude;
+                    document.getElementById('longitude').value = longitude;
+
+                    // 좌표를 주소로 변환
+                    geocoder.coord2Address(longitude, latitude, function(result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            if (result.length > 0) {
+                                var address = result[0].address.address_name;
+                                document.getElementById('address2').innerHTML = '현재 주소: ' + address;
+                                document.getElementById('position').innerHTML = '좌표: ' + latitude + ', ' + longitude;
+                                // 입력값 설정
+                                document.getElementById('latitude').value = latitude;
+                                document.getElementById('longitude').value = longitude;
+                                document.getElementById('address').value = address;
+                                document.getElementById('roomAddress').value = address;
+                            }
+                        }
+                    });
+                });
+
+                // 초기 위치의 좌표를 주소로 변환
+                geocoder.coord2Address(longitude, latitude, function(result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                        if (result.length > 0) {
+                            var address = result[0].address.address_name;
+                            document.getElementById('address2').innerHTML = '현재 주소: ' + address;
+                            document.getElementById('position').innerHTML = '좌표: ' + latitude + ', ' + longitude;
+                            // 입력값 설정
+                            document.getElementById('latitude').value = latitude;
+                            document.getElementById('longitude').value = longitude;
+                            document.getElementById('address').value = address;
+                            document.getElementById('roomAddress').value = address;
+
+                        }
+                    }
+                });
+
+            }
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                initMap();//맵실행
+            });//$(document).ready(function(){ !end!
+        </script>
     </head>
     <body>
     <main id="wrapper">
@@ -207,51 +383,58 @@
                         </div>
                         <div class="card-body">
                             <div class="reg-wrap">
-                                <div class="form-box">
+                                <form class="form-box" action="/admin/roomReg" method="post" enctype="multipart/form-data">
                                     <div class="form-item">
-                                        <input type="text" placeholder="&nbsp;" id="userId" name="userId" autocomplete="off">
-                                        <label for="username" class="title">숙소이름</label>
+                                        <input type="text" placeholder="&nbsp;" id="name" name="name" autocomplete="off">
+                                        <label for="name" class="title">숙소이름</label>
                                     </div>
                                     <div class="form-item">
-                                        <select id="region">
-                                            <option>서울</option>
-                                            <option>대전</option>
-                                            <option>대구</option>
+                                        <select id="region" name="locationId">
+                                            <option th:each="location : ${locations}" th:value="${location.id}" th:text="${location.name}"></option>
                                         </select>
                                         <label for="region" class="title">지역선택</label>
                                     </div>
                                     <div class="form-item">
-                                        <select id="theme">
-                                            <option>풍경</option>
-                                            <option>서비스</option>
-                                            <option>수영장</option>
+                                        <select id="theme" name="themeId">
+                                            <option th:each="theme : ${themes}" th:value="${theme.id}" th:text="${theme.name}"></option>
                                         </select>
                                         <label for="theme" class="title">테마선택</label>
                                     </div>
                                     <div class="form-item">
-                                        <input type="text" placeholder="&nbsp;" id="password" name="password" autocomplete="off">
-                                        <label for="text" class="title">숙소 상세주소</label>
+                                        <input type="button" id="findbutton" onclick="openAddressPopup()" value="주소 검색">
+                                    </div>
+                                    <div class="form-item">
+                                        <input type="text" placeholder="&nbsp;" id="roomAddress" name="address" autocomplete="off">
+                                        <label for="address" class="title">숙소 상세주소</label>
                                         <i class="ico-eye"></i>
                                     </div>
                                     <div class="form-item">
-                                        <input type="text" placeholder="&nbsp;" id="password" name="password" autocomplete="off">
-                                        <label for="text" class="title">숙소 내용</label>
+                                        <div id="map" style="width: 500px; height: 500px;"></div>
+                                        <input type="hidden" id="latitude" name="locationY" value=""><!-- 위도 -->
+                                        <input type="hidden" id="longitude" name="locationX" value=""><!-- 경도 -->
+                                        <input type="hidden" id="address" name="address" value=""><!-- 주소 -->
+                                        <p id="address2">현재 주소: </p>
+                                        <p id="position">위치: </p>
+                                    </div>
+                                    <div class="form-item">
+                                        <textarea id="description" name="description" maxlength="385"></textarea>
+                                        <label for="description" class="title">숙소 내용</label>
                                         <i class="ico-eye"></i>
                                     </div>
                                     <div class="form-item">
-                                        <input type="text" placeholder="&nbsp;" id="password" name="password" autocomplete="off">
-                                        <label for="text" class="title">숙소 가격</label>
+                                        <input type="text" placeholder="&nbsp;" id="price" name="price" autocomplete="off">
+                                        <label for="price" class="title">숙소 가격</label>
                                         <i class="ico-eye"></i>
                                     </div>
                                     <div id="inputContainer" class="form-item">
-                                        <label for="text" class="title">숙소 이미지</label>
-                                        <input type="file" id="imageUpload1" name="images" accept=".jpg, .jpeg, .png, .gif">
                                         <div id="imagePreviewContainer"></div>
+                                        <label for="imageUpload1" class="title">숙소 이미지</label>
+                                        <input type="file" id="imageUpload1" name="image" accept=".jpg, .jpeg, .png, .gif">
                                     </div>
                                     <div class="btn-wrap">
-                                        <a href="javascript:void(0);" class="btn-type full" id="aBtnLogin">숙소등록</a>
+                                        <button type="submit" class="btn-type full" id="aBtnLogin">숙소등록</button>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -278,7 +461,6 @@
 
     <script>
         let uploadCount = 0;
-
         document.getElementById('inputContainer').addEventListener('change', function(event) {
             let files = event.target.files;
             let file = files[0];
@@ -289,25 +471,27 @@
                 alert('잘못된 파일 형식입니다. 이미지 파일만 업로드 가능합니다.');
                 event.target.value = '';
             } else {
-                if (uploadCount >= 6) {
-                    alert('이미지는 최대 6개까지만 업로드 가능합니다.');
+                if (uploadCount >= 5) {
+                    alert('이미지는 최대 5개까지만 업로드 가능합니다.');
                     event.target.value = '';
                 } else {
                     uploadCount++;
-                    let newInput = document.createElement('input');
-                    newInput.type = 'file';
-                    newInput.id = 'imageUpload' + (uploadCount + 1);
-                    newInput.name = 'images';
-                    newInput.accept = '.jpg, .jpeg, .png, .gif';
-                    document.getElementById('inputContainer').appendChild(newInput);
-
+                    if (uploadCount < 5) {
+                        let newInput = document.createElement('input');
+                        newInput.type = 'file';
+                        newInput.id = 'imageUpload' + (uploadCount + 1);
+                        newInput.name = 'image';
+                        newInput.accept = '.jpg, .jpeg, .png, .gif';
+                        document.getElementById('inputContainer').appendChild(newInput);
+                    }
                     // 이미지 미리보기
                     let reader = new FileReader();
                     reader.onload = function(e) {
                         let newImage = document.createElement('img');
                         newImage.src = e.target.result;
-                        newImage.style.maxWidth = '500px';  // 최대 너비 설정
-                        newImage.style.maxHeight = '500px'; // 최대 높이 설정
+                        newImage.style.width = '462px';  // 최대 너비 설정
+                        newImage.style.maxHeight = '300px'; // 최대 높이 설정
+                        newImage.style.margin = '20px 0px';
                         document.getElementById('imagePreviewContainer').appendChild(newImage);
                     }
                     reader.readAsDataURL(file);
@@ -315,6 +499,10 @@
             }
         });
     </script>
-
+    <script th:inline="javascript">
+        /*[# th:if="${isSuccess}"]*/
+        alert('숙소가 등록되었습니다.');
+        /*[/]*/
+    </script>
     </body>
 </html>

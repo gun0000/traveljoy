@@ -61,18 +61,17 @@ public class Room extends BaseTimeEntity {
 
     //숙소X
     @Column(nullable = false)
-    private Double locationX;
+    private String locationX;
 
     //숙소Y
     @Column(nullable = false)
-    private Double locationY;
+    private String locationY;
 
     @Builder
-    public Room(String name, String description, Long price, Double rating, String address, Double locationX, Double locationY, Theme theme, Location location) {
+    public Room(String name, String description, Long price, String address, String locationX, String locationY, Theme theme, Location location) {
         this.name = name;
         this.description = description;
         this.price = price;
-        this.rating = rating;
         this.address = address;
         this.locationX = locationX;
         this.locationY = locationY;
