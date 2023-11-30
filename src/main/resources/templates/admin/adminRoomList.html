@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>관리자페이지-숙소등록</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         <link rel="stylesheet" type="text/css" th:href="@{/css/font.css}">
         <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}">
         <style>
@@ -139,19 +140,41 @@
                                     <div class="row">
                                         <div class="col-sm-12 col-md-6">
                                             <div class="dataTables_length" id="dataTable_length">
-                                                <label> 
-                                                    <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
-                                                        <option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option>
-                                                    </select> 항목 보기</label>
-                                                </div>
+                                                <label>
+                                                    <select id="tableRowCount" name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm" th:field="*{size}">
+                                                        <option value="10">10</option>
+                                                        <option value="25">25</option>
+                                                        <option value="50">50</option>
+                                                        <option value="100">100</option>
+                                                    </select> 항목 보기
+                                                </label>
                                             </div>
-                                            <div class="col-sm-12 col-md-6">
-                                                <div id="dataTable_filter" class="dataTables_filter">
-                                                    <label>검색:
-                                                        <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable">
-                                                    </label>
-                                                </div>
+                                            <script th:inline="javascript">
+                                                /*<![CDATA[*/
+                                                $(document).ready(function() {
+                                                    var selectElement = $('#tableRowCount');
+                                                    var size;
+                                                    var url = window.location.href; // 현재 URL 가져오기
+                                                    var urlParts = url.split('/');
+                                                    size = urlParts[urlParts.length - 2]; // URL의 뒤에서 두 번째 부분(행 수) 가져오기
+                                                    selectElement.find('option[value=' + size + ']').prop('selected', true); // 해당 값으로 select 요소 설정
+
+                                                    selectElement.on('change', function() {
+                                                        size = $(this).val();
+                                                        console.log("Value changed to " + size);
+                                                        window.location.href = "/admin/roomList/1/" + size + "/";
+                                                    });
+                                                });
+                                                /*]]>*/
+                                            </script>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6">
+                                            <div id="dataTable_filter" class="dataTables_filter">
+                                                <label>검색:
+                                                    <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable">
+                                                </label>
                                             </div>
+                                        </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-12">
@@ -179,106 +202,15 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    
-                                                    <tr class="odd">
-                                                        <td class="sorting_1">숙소이름</td>
-                                                        <td>숙소지역</td>
-                                                        <td>숙소테마</td>
-                                                        <td>숙소가격</td>
-                                                        <td>2008/11/28</td>
+                                                    <tr th:each="room : ${rooms}">
+                                                        <td class="sorting_1" th:text="${room.roomName}"></td>
+                                                        <td th:text="${room.locationName}"></td>
+                                                        <td th:text="${room.themeName}"></td>
+                                                        <td th:text="${room.price}+원"></td>
+                                                        <td th:text="${#temporals.format(room.createdAt, 'yyyy/MM/dd')}"></td>
                                                         <td>
-                                                            <button>숙소수정</button>
-                                                            <button>숙소삭제</button>
-                                                        </td>
-                                                    </tr><tr class="even">
-                                                        <td class="sorting_1">숙소이름</td>
-                                                        <td>숙소지역</td>
-                                                        <td>숙소테마</td>
-                                                        <td>숙소가격</td>
-                                                        <td>2009/10/09</td>
-                                                        <td>
-                                                            <button>숙소수정</button>
-                                                            <button>숙소삭제</button>
-                                                        </td>
-                                                    </tr><tr class="odd">
-                                                        <td class="sorting_1">숙소이름</td>
-                                                        <td>숙소지역</td>
-                                                        <td>숙소테마</td>
-                                                        <td>숙소가격</td>
-                                                        <td>2009/01/12</td>
-                                                        <td>
-                                                            <button>숙소수정</button>
-                                                            <button>숙소삭제</button>
-                                                        </td>
-                                                    </tr><tr class="even">
-                                                        <td class="sorting_1">숙소이름</td>
-                                                        <td>숙소지역</td>
-                                                        <td>숙소테마</td>
-                                                        <td>숙소가격</td>
-                                                        <td>2012/10/13</td>
-                                                        <td>
-                                                            <button>숙소수정</button>
-                                                            <button>숙소삭제</button>
-                                                        </td>
-                                                    </tr><tr class="odd">
-                                                        <td class="sorting_1">숙소이름</td>
-                                                        <td>숙소지역</td>
-                                                        <td>숙소테마</td>
-                                                        <td>숙소가격</td>
-                                                        <td>2011/06/07</td>
-                                                        <td>
-                                                            <button>숙소수정</button>
-                                                            <button>숙소삭제</button>
-                                                        </td>
-                                                    </tr><tr class="even">
-                                                        <td class="sorting_1">숙소이름</td>
-                                                        <td>숙소지역</td>
-                                                        <td>숙소테마</td>
-                                                        <td>숙소가격</td>
-                                                        <td>2012/12/02</td>
-                                                        <td>
-                                                            <button>숙소수정</button>
-                                                            <button>숙소삭제</button>
-                                                        </td>
-                                                    </tr><tr class="odd">
-                                                        <td class="sorting_1">숙소이름</td>
-                                                        <td>숙소지역</td>
-                                                        <td>숙소테마</td>
-                                                        <td>숙소가격</td>
-                                                        <td>2011/05/03</td>
-                                                        <td>
-                                                            <button>숙소수정</button>
-                                                            <button>숙소삭제</button>
-                                                        </td>
-                                                    </tr><tr class="even">
-                                                        <td class="sorting_1">숙소이름</td>
-                                                        <td>숙소지역</td>
-                                                        <td>숙소테마</td>
-                                                        <td>숙소가격</td>
-                                                        <td>2011/12/12</td>
-                                                        <td>
-                                                            <button>숙소수정</button>
-                                                            <button>숙소삭제</button>
-                                                        </td>
-                                                    </tr><tr class="odd">
-                                                        <td class="sorting_1">숙소이름</td>
-                                                        <td>숙소지역</td>
-                                                        <td>숙소테마</td>
-                                                        <td>숙소가격</td>
-                                                        <td>2011/12/06</td>
-                                                        <td>
-                                                            <button>숙소수정</button>
-                                                            <button>숙소삭제</button>
-                                                        </td>
-                                                    </tr><tr class="even">
-                                                        <td class="sorting_1">숙소이름</td>
-                                                        <td>숙소지역</td>
-                                                        <td>숙소테마</td>
-                                                        <td>숙소가격</td>
-                                                        <td>2012/03/29</td>
-                                                        <td>
-                                                            <button>숙소수정</button>
-                                                            <button>숙소삭제</button>
+                                                            <button th:value="${room.id}">숙소수정</button>
+                                                            <button th:value="${room.id}">숙소삭제</button>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -287,53 +219,39 @@
                                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-5">
-                                <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">
-                                    57개 항목 중 1~10개 표시 중
+                                <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite" th:text="'총 ' + ${rooms.totalElements} + '개 항목 중 ' + ${rooms.number * rooms.size + 1} + '~' + ${lastItemNumber} + '개 표시 중'">
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-7">
                                 <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
-                                    <ul class="pagination">
-                                        <li class="paginate_button page-item previous disabled" id="dataTable_previous">
-                                            <a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">
-                                                이전
-                                            </a>
-                                        </li>
-                                        <li class="paginate_button page-item active">
-                                            <a href="#" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">
-                                                1
-                                            </a>
-                                        </li>
-                                        <li class="paginate_button page-item ">
-                                            <a href="#" aria-controls="dataTable" data-dt-idx="2" tabindex="0" class="page-link">
-                                                2
-                                            </a>
-                                        </li>
-                                        <li class="paginate_button page-item ">
-                                            <a href="#" aria-controls="dataTable" data-dt-idx="3" tabindex="0" class="page-link">
-                                                3
-                                            </a>
-                                        </li>
-                                        <li class="paginate_button page-item ">
-                                            <a href="#" aria-controls="dataTable" data-dt-idx="4" tabindex="0" class="page-link">
-                                                4
-                                            </a>
-                                        </li>
-                                        <li class="paginate_button page-item ">
-                                            <a href="#" aria-controls="dataTable" data-dt-idx="5" tabindex="0" class="page-link">
-                                                5
-                                            </a>
-                                        </li>
-                                        <li class="paginate_button page-item ">
-                                            <a href="#" aria-controls="dataTable" data-dt-idx="6" tabindex="0" class="page-link">
-                                                6
-                                            </a>
-                                        </li>
-                                        <li class="paginate_button page-item next" id="dataTable_next">
-                                            <a href="#" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">
-                                                다음
-                                            </a>
-                                        </li>
+                                    <ul class="pagination" >
+                                        <!-- 페이지 사이즈 정의 -->
+                                        <th:block th:with="pageSize=5">
+                                            <!-- 이전 페이지 버튼 -->
+                                            <li class="paginate_button page-item previous" th:with="prevGroup=${rooms.number - rooms.number mod pageSize}">
+                                                <th:block th:if="${prevGroup > 0}">
+                                                    <a th:href="@{/admin/roomList/{prevGroup}/{size}/(prevGroup=${prevGroup - pageSize}, size=${rooms.size})}" class="page-link">
+                                                        이전
+                                                    </a>
+                                                </th:block>
+                                            </li>
+                                            <!-- 페이지 번호 -->
+                                            <th:block th:with="startPage=${rooms.number - rooms.number mod pageSize}, endPage=${(startPage + pageSize) < rooms.totalPages ? (startPage + pageSize) : rooms.totalPages}">
+                                                <th:block th:each="i : ${#numbers.sequence(startPage, endPage - 1)}">
+                                                    <li class="paginate_button page-item" th:classappend="${i == rooms.number ? 'active' : ''}">
+                                                        <a th:href="@{/admin/roomList/{i}/{size}/(i=${i}, size=${rooms.size})}" class="page-link" th:text="${i + 1}"></a>
+                                                    </li>
+                                                </th:block>
+                                            </th:block>
+                                            <!-- 다음 페이지 버튼 -->
+                                            <li class="paginate_button page-item next" th:with="nextGroup=${rooms.number - rooms.number mod pageSize + pageSize}">
+                                                <th:block th:if="${nextGroup < rooms.totalPages}">
+                                                    <a th:href="@{/admin/roomList/{nextGroup}/{size}/(nextGroup=${nextGroup}, size=${rooms.size})}" class="page-link">
+                                                        다음
+                                                    </a>
+                                                </th:block>
+                                            </li>
+                                        </th:block>
                                     </ul>
                                 </div>
                             </div>
@@ -360,48 +278,6 @@
         </div>
         <!-- 콘텐츠 end -->
     </main>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-
-    <script>
-        let uploadCount = 0;
-
-        document.getElementById('inputContainer').addEventListener('change', function(event) {
-            let files = event.target.files;
-            let file = files[0];
-            let fileType = file['type'];
-            let validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
-
-            if (!validImageTypes.includes(fileType)) {
-                alert('잘못된 파일 형식입니다. 이미지 파일만 업로드 가능합니다.');
-                event.target.value = '';
-            } else {
-                if (uploadCount >= 6) {
-                    alert('이미지는 최대 6개까지만 업로드 가능합니다.');
-                    event.target.value = '';
-                } else {
-                    uploadCount++;
-                    let newInput = document.createElement('input');
-                    newInput.type = 'file';
-                    newInput.id = 'imageUpload' + (uploadCount + 1);
-                    newInput.name = 'images';
-                    newInput.accept = '.jpg, .jpeg, .png, .gif';
-                    document.getElementById('inputContainer').appendChild(newInput);
-
-                    // 이미지 미리보기
-                    let reader = new FileReader();
-                    reader.onload = function(e) {
-                        let newImage = document.createElement('img');
-                        newImage.src = e.target.result;
-                        newImage.style.maxWidth = '500px';  // 최대 너비 설정
-                        newImage.style.maxHeight = '500px'; // 최대 높이 설정
-                        document.getElementById('imagePreviewContainer').appendChild(newImage);
-                    }
-                    reader.readAsDataURL(file);
-                }
-            }
-        });
-    </script>
-
     </body>
 </html>

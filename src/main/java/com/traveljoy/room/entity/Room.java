@@ -17,11 +17,11 @@ import java.util.List;
 public class Room extends BaseTimeEntity {
     //연관관계
     //Location 지역테이블
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
     private Location location;
     //Theme 테마테이블
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "theme_id")
     private Theme theme;
 

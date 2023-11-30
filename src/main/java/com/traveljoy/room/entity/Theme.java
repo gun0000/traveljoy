@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -12,8 +14,8 @@ import lombok.NoArgsConstructor;
 public class Theme extends BaseTimeEntity {
     //연관관계
     //Room 숙소 테이블
-    @OneToOne(mappedBy = "theme")
-    private Room room;
+    @OneToMany(mappedBy = "theme", fetch = FetchType.LAZY)
+    private List<Room> rooms = new ArrayList<>();
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

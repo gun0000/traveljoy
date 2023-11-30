@@ -1,20 +1,21 @@
 package com.traveljoy.admin.controller;
 
+import com.traveljoy.admin.dto.AdminRoomListDto;
 import com.traveljoy.admin.service.AdminService;
 import com.traveljoy.room.dto.LocationDto;
 import com.traveljoy.room.dto.RoomDto;
 import com.traveljoy.room.dto.ThemeDto;
 import com.traveljoy.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -49,8 +50,13 @@ public class AdminController {
         return "admin/adminRoomReg";
     }
     //관리자 숙소 리스트 페이지
-    @GetMapping("/roomList")
-    public String adminRoomList(){
+    @GetMapping("/roomList/{page}/{size}/")
+    public String adminRoomList(@PathVariable int page, @PathVariable int size, Model model){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<AdminRoomListDto> rooms = roomService.findRoomWithLocationAndThemeListByPage(pageable);
+        model.addAttribute("rooms", rooms);
+        Long lastItemNumber = Math.min((long) (rooms.getNumber() + 1) * rooms.getSize(), rooms.getTotalElements());
+        model.addAttribute("lastItemNumber", lastItemNumber);
         return "admin/adminRoomList";
     }
     //관리자 숙소 등록

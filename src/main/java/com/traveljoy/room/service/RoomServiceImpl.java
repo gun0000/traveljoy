@@ -1,5 +1,6 @@
 package com.traveljoy.room.service;
 
+import com.traveljoy.admin.dto.AdminRoomListDto;
 import com.traveljoy.room.dto.LocationDto;
 import com.traveljoy.room.dto.RoomDto;
 import com.traveljoy.room.dto.ThemeDto;
@@ -8,12 +9,11 @@ import com.traveljoy.room.entity.Room;
 import com.traveljoy.room.entity.RoomImage;
 import com.traveljoy.room.entity.Theme;
 import com.traveljoy.room.mapper.RoomMapper;
-import com.traveljoy.room.repository.LocationRepository;
-import com.traveljoy.room.repository.RoomImageRepository;
-import com.traveljoy.room.repository.RoomRepository;
-import com.traveljoy.room.repository.ThemeRepository;
+import com.traveljoy.room.repository.*;
 import com.traveljoy.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,5 +73,10 @@ public class RoomServiceImpl implements RoomService {
             roomImageRepository.save(roomImage);
         }
 
+    }
+
+    @Override
+    public Page<AdminRoomListDto> findRoomWithLocationAndThemeListByPage(Pageable pageable) {
+        return  roomRepository.findRoomWithLocationAndThemeListByPage(pageable);
     }
 }
