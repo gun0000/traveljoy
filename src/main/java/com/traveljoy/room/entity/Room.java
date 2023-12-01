@@ -26,13 +26,13 @@ public class Room extends BaseTimeEntity {
     private Theme theme;
 
     //Reservation 예약테이블
-    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Reservation> reservations = new ArrayList<>();
     //Review 리뷰테이블
-    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<>();
     //Image 이미지테이블
-    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<RoomImage> Images = new ArrayList<>();
 
     //숙소번호
@@ -69,6 +69,17 @@ public class Room extends BaseTimeEntity {
 
     @Builder
     public Room(String name, String description, Long price, String address, String locationX, String locationY, Theme theme, Location location) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.address = address;
+        this.locationX = locationX;
+        this.locationY = locationY;
+        this.theme = theme;
+        this.location = location;
+    }
+
+    public void update(String name, String description, Long price, String address, String locationX, String locationY, Theme theme, Location location) {
         this.name = name;
         this.description = description;
         this.price = price;

@@ -21,4 +21,16 @@ public class RoomDto {
     private String description;
     private Long price;
     private List<String> images = new ArrayList<>();
+    private List<Long> imageId = new ArrayList<>();
+    public RoomDto(Long id, String name, Long locationId, Long themeId, String locationX, String locationY, String address, String description, Long price) {
+        this.id = id;
+        this.name = name;
+        this.locationId = locationId;
+        this.themeId = themeId;
+        this.locationX = locationX;
+        this.locationY = locationY;
+        this.address = address;
+        this.description = description;
+        this.price = price;
+    }
 }

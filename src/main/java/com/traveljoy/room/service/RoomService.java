@@ -21,4 +21,12 @@ public interface RoomService {
 
     //관리자 숙소목록 리스트
     Page<AdminRoomListDto> findRoomWithLocationAndThemeListByPage(Pageable pageable);
+    //관리자 숙소목록 검색리스트
+    Page<AdminRoomListDto> findRoomWithLocationAndThemeListByPageAndSearch(Pageable pageable, String searchType, String keyword);
+    //관리자 숙소 삭제
+    void deleteRoom(Long id);
+    //관리자 숙소 수정 페이지
+    RoomDto getRoomAndImagesListById(Long id);
+
+    void updateRoom(RoomDto roomDto);
 }

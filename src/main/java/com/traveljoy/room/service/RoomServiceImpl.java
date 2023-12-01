@@ -79,4 +79,48 @@ public class RoomServiceImpl implements RoomService {
     public Page<AdminRoomListDto> findRoomWithLocationAndThemeListByPage(Pageable pageable) {
         return  roomRepository.findRoomWithLocationAndThemeListByPage(pageable);
     }
+    @Override
+    public Page<AdminRoomListDto> findRoomWithLocationAndThemeListByPageAndSearch(Pageable pageable, String searchType, String keyword) {
+        return roomRepository.findRoomWithLocationAndThemeListByPageAndSearch(pageable, searchType, keyword);
+    }
+
+    public void deleteRoom(Long id) {
+        roomRepository.deleteById(id);
+    }
+
+    @Override
+    public RoomDto getRoomAndImagesListById(Long id) {
+        return roomRepository.getRoomAndImagesListById(id);
+    }
+    @Override
+    public void updateRoom(RoomDto roomDto) {
+        // 숙소 정보 수정
+        Room room = roomRepository.getReferenceById(roomDto.getId());
+        Location location = locationRepository.getReferenceById(roomDto.getLocationId());
+        Theme theme = themeRepository.getReferenceById(roomDto.getThemeId());
+
+        room.update(roomDto.getName(), roomDto.getDescription(), roomDto.getPrice(), roomDto.getAddress(), roomDto.getLocationX(), roomDto.getLocationY(), theme, location);
+        roomRepository.save(room);
+
+        // 숙소 이미지 정보 수정
+        if(!roomDto.getImages().isEmpty()) {
+            for (int i = 0; i < roomDto.getImages().size(); i++) {
+                try {
+                String imageUrl = roomDto.getImages().get(i);
+                Long imageId = roomDto.getImageId().get(i);
+
+                RoomImage roomImage = roomImageRepository.getReferenceById(imageId);
+                roomImage.update(imageUrl, i == 0); // 첫 번째 이미지일 경우 isMain을 true로 설정합니다.
+                roomImageRepository.save(roomImage);
+                } catch (Exception e) {
+                    System.out.println("이미지 업데이트에 실패했습니다: " + e.getMessage());
+                }
+            }
+        }
+    }
+
+
+
+
+
 }

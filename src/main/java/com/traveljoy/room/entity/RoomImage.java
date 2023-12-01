@@ -34,4 +34,8 @@ public class RoomImage extends BaseTimeEntity {
         this.image = image;
         this.isMain = isMain;
     }
+    public void update(String image, boolean isMain) {
+        this.image = image;
+        this.isMain = isMain;
+    }
 }

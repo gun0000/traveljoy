@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자페이지-숙소수정</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}">
+    <style>
+        /*기본*/
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        @media (min-width: 1200px){
+            /*컸을때 박스크키*/
+            .reg-wrap {
+                width: 504px;
+                margin: 5px 100px;
+            }
+
+
+            .form-item input:not(:placeholder-shown) + .title {
+                font-size: 11px;
+                top: 9px;
+                color: #94949a;
+            }
+
+            .form-item input {
+                padding-top: 15px;
+            }
+            .form-item input {
+                box-sizing: border-box;
+                height: 64px;
+                padding: 0 20px;
+                border: 1px solid #efefef;
+                background: #f4f4f4;
+                color: #111;
+                border-radius: 12px;
+            }
+            .form-item label.title {
+                font-size: 18px;
+                top: 21px;
+            }
+            .btn-type full{
+                max-width: 100%;
+                height: 64px;
+                font-size: 20px;
+            }
+            .chk-box label {
+                font-size: 16px;
+                font-weight: 600;
+                margin-right: 10px
+            }
+            .sns-box {
+                padding-top: 60px;
+                text-align: center;
+            }
+            .tooltip {
+                background: #fff;
+                border-radius: 27px;
+                padding: 17px 19px;
+                font-size: 18px;
+                min-width: 185px;
+            }
+        }
+
+
+        /*인풋스타일*/
+        input[type=text]:focus, input[type=number]:focus, input[type=password]:focus, input[type=tel]:focus, select:focus {
+            border-color: #b8ffc5;
+            background: #e8ffef;
+            outline: none;
+            color: #111;
+        }
+        input[type=text], input[type=submit], input[type=password], input[type=search], input[type=number], input[type=reset], input[type=email], input[type=tel], input[type=search], input[type=file], input[type=email], input[type=tel], select {
+            height: 56px;
+            padding: 0 20px;
+            border: 1px solid #efefef;
+            background: #f4f4f4;
+            color: #111;
+            border-radius: 12px;
+        }
+
+
+        .form-item:first-child {
+            margin-top: 0;
+        }
+        .form-item {
+            position: relative;
+            margin-top: 12px;
+        }
+
+        .form-item label.title {
+            position: absolute;
+            left: 20px;
+            top: 19px;
+            display: block;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            font-size: 15px;
+            font-weight: 600;
+            color: #94949a;
+        }
+        /*인풋쓰고 글씨 올리기*/
+        .form-item input:focus ~ .title {
+            font-size: 11px;
+            top: 9px;
+            color: #03c75a;
+        }
+        .form-item select:focus + .title {
+            font-size: 11px;
+            top: 9px;
+            color: #03c75a;
+        }
+        .form-item input:not(:placeholder-shown) + .title {
+            font-size: 11px;
+            top: 9px;
+            color: #94949a;
+        }
+        .form-item select + .title {
+            font-size: 11px;
+            top: 9px;
+            color: #94949a;
+        }
+        /*end*/
+        .btn-wrap {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+        }
+        .btn-type {
+            background: #03c75a;
+            color: #fff;
+            max-width: 100%;
+            border: 0px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            height: 56px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            transition: background 0.2s ease;
+            box-sizing: border-box;
+        }
+        /*작아졌을때 인풋*/
+        select, input, textarea {
+            width: 100%;
+            vertical-align: middle;
+            box-shadow: none;
+            outline: none;
+            border: 0;
+            font-family: "SUIT", sans-serif;
+            -moz-appearance: none;
+            font-weight: 600;
+            font-size: 15px;
+            color: inherit;
+        }
+        #description{
+            height: 300px;
+            padding: 40px 20px;
+            border: 1px solid #efefef;
+            background: #f4f4f4;
+            color: #111;
+            border-radius: 12px;
+            resize: none;
+        }
+        #description:focus {
+            border-color: #b8ffc5;
+            background: #e8ffef;
+            outline: none;
+            color: #111;
+        }
+        #findbutton{
+            background: #8f8f8f;
+            color: #fff;
+        }
+        #inputContainer{
+            padding: 40px 20px;
+            border: 1px solid #efefef;
+            background: #f4f4f4;
+            color: #111;
+            border-radius: 12px;
+        }
+        #imageUpload1{
+            margin-top: 20px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <!-- 다음 우편번호 API 스크립트 -->
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <!--카카오맵-->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f4dd8fe5910ea0ebe66e44e68d2a7493&libraries=services,clusterer,drawing"></script>
+    <script>
+        function openAddressPopup() {
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    // 선택된 주소를 주소 입력란에 채우기
+                    document.getElementById('address').value = data.address;
+                    document.getElementById('address2').innerHTML = data.address;
+                    document.getElementById('roomAddress').value = data.address;
+                    // 주소로 위도, 경도 검색
+                    var geocoder = new kakao.maps.services.Geocoder();
+                    geocoder.addressSearch(data.address, function(result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            var position = new kakao.maps.LatLng(result[0].y, result[0].x);
+                            marker.setPosition(position);
+                            map.setCenter(position);
+                            // 위도, 경도 표시하기
+                            document.getElementById('latitude').value = result[0].y;
+                            document.getElementById('longitude').value = result[0].x;
+                            document.getElementById('position').innerHTML = "좌표: "+result[0].y+" , "+result[0].x+"";
+                        }
+                    });
+                }
+            }).open();
+        }
+    </script>
+    <script th:inline="javascript">
+        var map;
+        var marker;
+        function initMap() {
+            // 숙소의 현재 위치
+            /*<![CDATA[*/
+            var latitude = /*[[${room.locationY}]]*/ 37.56413895923679; // 위도
+            var longitude = /*[[${room.locationX}]]*/ 126.97718160053579; // 경도
+            /*]]>*/
+            var initialLatLng = new kakao.maps.LatLng(latitude, longitude);
+            var mapOptions = {
+                center: initialLatLng,
+                level: 2
+            };
+            // 지도 생성
+            map = new kakao.maps.Map(document.getElementById('map'), mapOptions);
+            // 마커 생성
+            marker = new kakao.maps.Marker({
+                position: map.getCenter(),
+                draggable: true // 마커를 드래그할 수 있도록 설정
+            });
+            marker.setMap(map);
+            // 주소를 좌표로 변환하는 Geocoder 객체 생성
+            var geocoder = new kakao.maps.services.Geocoder();
+            // 마커 생성 함수
+            function createMarker(address) {
+                // 주소를 좌표로 변환
+                geocoder.addressSearch(address, function(result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                        var position = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                        // 마커 생성
+                        marker.setPosition(position);
+                        map.setCenter(position);
+                    }
+                });
+            }
+            // 마커 드래그 이벤트 리스너 등록
+            kakao.maps.event.addListener(marker, 'dragend', function() {
+                var position = marker.getPosition(); // 마커의 좌표를 가져옵니다.
+                var latitude = position.getLat(); // 위도
+                var longitude = position.getLng(); // 경도
+                document.getElementById('latitude').value = latitude;
+                document.getElementById('longitude').value = longitude;
+                // 좌표를 주소로 변환
+                geocoder.coord2Address(longitude, latitude, function(result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                        if (result.length > 0) {
+                            var address = result[0].address.address_name;
+                            document.getElementById('address2').innerHTML = '현재 주소: ' + address;
+                            document.getElementById('position').innerHTML = '좌표: ' + latitude + ', ' + longitude;
+                        }
+                    }
+                });
+            });
+            // 주소 값을 가져와서 마커를 생성합니다.
+            var address = document.getElementById('address').value;
+            createMarker(address);
+            // 지도 드래그 이벤트 리스너 등록
+            kakao.maps.event.addListener(map, 'dragend', function() {
+                var centerLatLng = map.getCenter();
+                marker.setPosition(centerLatLng);
+                var latitude = centerLatLng.getLat();
+                var longitude = centerLatLng.getLng();
+                document.getElementById('latitude').value = latitude;
+                document.getElementById('longitude').value = longitude;
+                // 좌표를 주소로 변환
+                geocoder.coord2Address(longitude, latitude, function(result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                        if (result.length > 0) {
+                            var address = result[0].address.address_name;
+                            document.getElementById('address2').innerHTML = '현재 주소: ' + address;
+                            document.getElementById('position').innerHTML = '좌표: ' + latitude + ', ' + longitude;
+                            // 입력값 설정
+                            document.getElementById('latitude').value = latitude;
+                            document.getElementById('longitude').value = longitude;
+                            document.getElementById('address').value = address;
+                            document.getElementById('roomAddress').value = address;
+                        }
+                    }
+                });
+            });
+            // 초기 위치의 좌표를 주소로 변환
+            geocoder.coord2Address(longitude, latitude, function(result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    if (result.length > 0) {
+                        var address = result[0].address.address_name;
+                        document.getElementById('address2').innerHTML = '현재 주소: ' + address;
+                        document.getElementById('position').innerHTML = '좌표: ' + latitude + ', ' + longitude;
+                        // 입력값 설정
+                        document.getElementById('latitude').value = latitude;
+                        document.getElementById('longitude').value = longitude;
+                        document.getElementById('address').value = address;
+                        document.getElementById('roomAddress').value = address;
+
+                    }
+                }
+            });
+
+        }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            initMap();//맵실행
+        });//$(document).ready(function(){ !end!
+    </script>
+</head>
+<body>
+<main id="wrapper">
+    <!-- 콘텐츠 -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- 메인 콘텐츠 -->
+        <div id="content">
+            <!-- 상단바 -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <!-- 상단바 탐색바 -->
+                <ul class="navbar-nav ml-auto">
+                </ul>
+            </nav>
+            <!-- 상단바 끝 -->
+            <!-- 페이지 콘텐츠 시작-->
+            <div class="container-fluid">
+                <!-- 페이지 제목 -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">숙소 수정</h1>
+                </div>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary"></h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="reg-wrap">
+                            <form class="form-box" th:action="@{/admin/room/{id}/edit/(id=${room.id})}" method="post" enctype="multipart/form-data">
+                                <div class="form-item">
+                                    <input th:value="${room.name}" type="text" placeholder="&nbsp;" id="name" name="name" autocomplete="off" >
+                                    <label for="name" class="title">숙소이름</label>
+                                </div>
+                                <div class="form-item">
+                                    <select id="region" name="locationId">
+                                        <option th:each="location : ${locations}" th:value="${location.id}" th:text="${location.name}" th:selected="${location.id == room.locationId}"></option>
+                                    </select>
+                                    <label for="region" class="title">지역선택</label>
+                                </div>
+                                <div class="form-item">
+                                    <select id="theme" name="themeId">
+                                        <option th:each="theme : ${themes}" th:value="${theme.id}" th:text="${theme.name}" th:selected="${theme.id == room.themeId}"></option>
+                                    </select>
+                                    <label for="theme" class="title">테마선택</label>
+                                </div>
+                                <div class="form-item">
+                                    <input type="button" id="findbutton" onclick="openAddressPopup()" value="주소 검색">
+                                </div>
+                                <div class="form-item">
+                                    <input th:value="${room.address}" type="text" placeholder="&nbsp;" id="roomAddress" name="address" autocomplete="off">
+                                    <label for="address" class="title">숙소 상세주소</label>
+                                    <i class="ico-eye"></i>
+                                </div>
+                                <div class="form-item">
+                                    <div id="map" style="width: 500px; height: 500px;"></div>
+                                    <input type="hidden" id="latitude" name="locationY" value=""><!-- 위도 -->
+                                    <input type="hidden" id="longitude" name="locationX" value=""><!-- 경도 -->
+                                    <input type="hidden" id="address" name="address" value=""><!-- 주소 -->
+                                    <p id="address2">현재 주소: </p>
+                                    <p id="position">위치: </p>
+                                </div>
+                                <div class="form-item">
+                                    <textarea th:text="${room.description}" id="description" name="description" maxlength="385"></textarea>
+                                    <label for="description" class="title">숙소 내용</label>
+                                    <i class="ico-eye"></i>
+                                </div>
+                                <div class="form-item">
+                                    <input th:value="${room.price}" type="text" placeholder="&nbsp;" id="price" name="price" autocomplete="off">
+                                    <label for="price" class="title">숙소 가격</label>
+                                    <i class="ico-eye"></i>
+                                </div>
+                                <div id="inputContainer" class="form-item">
+                                    <div id="imagePreviewContainer"></div>
+                                    <label for="imageUpload1" class="title">숙소 이미지</label>
+                                    <input th:if="${#lists.isEmpty(room.images)}" type="file" id="imageUpload1" name="image" accept=".jpg, .jpeg, .png, .gif">
+                                </div>
+                                <div class="btn-wrap">
+                                    <button type="submit" class="btn-type full" id="aBtnLogin">숙소수정</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--페이지 콘텐츠 시작 !끝-->
+        </div>
+        <!-- 메인 콘텐츠 !끝 -->
+    </div>
+    <!-- 콘텐츠 end -->
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let imageFilenames = /*[[${room.images}]]*/ [];  // 이미지 파일 이름들
+    let imageIds = /*[[${room.imageId}]]*/ [];  // 이미지 파일 이름들
+    let inputContainer = document.getElementById('inputContainer');
+    let imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    // 이미지 파일 이름이 없는 경우에만 아래의 코드를 실행
+    if (imageFilenames == '') {
+        let uploadCount = 0;
+        document.getElementById('inputContainer').addEventListener('change', function(event) {
+            let files = event.target.files;
+            let file = files[0];
+            let fileType = file['type'];
+            let validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+
+            if (!validImageTypes.includes(fileType)) {
+                alert('잘못된 파일 형식입니다. 이미지 파일만 업로드 가능합니다.');
+                event.target.value = '';
+            } else {
+                if (uploadCount >= 5) {
+                    alert('이미지는 최대 5개까지만 업로드 가능합니다.');
+                    event.target.value = '';
+                } else {
+                    uploadCount++;
+                    if (uploadCount < 5) {
+                        let newInput = document.createElement('input');
+                        newInput.type = 'file';
+                        newInput.id = 'imageUpload' + (uploadCount + 1);
+                        newInput.name = 'image';
+                        newInput.accept = '.jpg, .jpeg, .png, .gif';
+                        document.getElementById('inputContainer').appendChild(newInput);
+                    }
+                    // 이미지 미리보기
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        let newImage = document.createElement('img');
+                        newImage.src = e.target.result;
+                        newImage.style.width = '462px';  // 최대 너비 설정
+                        newImage.style.maxHeight = '300px'; // 최대 높이 설정
+                        newImage.style.margin = '20px 0px';
+                        document.getElementById('imagePreviewContainer').appendChild(newImage);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+    }
+    imageFilenames.forEach(function(imageFilename, index) {
+        let imageUrl = '/images/roomimage/' + imageFilename;  // 이미지 URL 생성
+        // 이미지 미리보기 생성
+        let newImage = document.createElement('img');
+        newImage.src = imageUrl;  // 이미지 URL을 src 속성에 설정
+        newImage.style.width = '462px';  // 최대 너비 설정
+        newImage.style.maxHeight = '300px';  // 최대 높이 설정
+        newImage.style.margin = '20px 0px';
+        newImage.id = 'imagePreview' + (index + 1);  // 이미지 미리보기 ID 설정
+        imagePreviewContainer.appendChild(newImage);  // 이미지 미리보기 컨테이너에 이미지 추가
+
+        // 파일 입력 필드 생성
+        let newInput = document.createElement('input');
+        newInput.type = 'file';
+        newInput.id = 'imageUpload' + (index + 1);
+        newInput.name = 'image' + imageIds[index];
+        newInput.accept = '.jpg, .jpeg, .png, .gif';
+        inputContainer.appendChild(newInput);  // 파일 입력 필드 컨테이너에 파일 입력 필드 추가
+
+        // 파일 변경 이벤트 핸들러 설정
+        newInput.addEventListener('change', function(event) {
+            let file = event.target.files[0];
+            let reader = new FileReader();
+
+            reader.onload = function(e) {
+                let previewImage = document.getElementById('imagePreview' + (index + 1));
+                previewImage.src = e.target.result;  // 변경된 이미지로 미리보기 업데이트
+            };
+
+            reader.readAsDataURL(file);  // 파일 내용 읽기
+        });
+    });
+    /*]]>*/
+</script>
+
+<script th:inline="javascript">
+    /*[# th:if="${updateSuccess}"]*/
+    alert('숙소가 수정되었습니다.');
+    window.close();
+    /*[/]*/
+</script>
+
+</body>
+</html>
