@@ -1,22 +1,39 @@
 package com.traveljoy.room.controller;
 
+import com.traveljoy.room.dto.LocationDto;
+import com.traveljoy.room.dto.RoomShowDto;
+import com.traveljoy.room.dto.ThemeDto;
+import com.traveljoy.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Validated
 @RequestMapping("/room")
 @Controller
 public class RoomController {
+
+    private final RoomService roomService;
+
 //메인페이지 //상품리스트 여러개 보기
     @GetMapping("/main")
-    public String roomMain(){
+    public String roomMain(Model model){
+        List<LocationDto> locations = roomService.getAllLocations();
+        List<ThemeDto> themes = roomService.getAllThemes();
+        model.addAttribute("locations", locations);
+        model.addAttribute("themes", themes);
         return "room/roomMain";
+    }
+    //ajax 지역 숙소리스트
+    @GetMapping("/main/{locationId}/location")
+    @ResponseBody
+    public List<RoomShowDto> roomMainLocationShows(@PathVariable Long locationId){
+        return roomService.getRoomShowByLocationId(locationId);
     }
 //숙소검색페이지 //상품리스트보기
     @GetMapping("/search")

@@ -3,6 +3,7 @@ package com.traveljoy.room.service;
 import com.traveljoy.admin.dto.AdminRoomListDto;
 import com.traveljoy.room.dto.LocationDto;
 import com.traveljoy.room.dto.RoomDto;
+import com.traveljoy.room.dto.RoomShowDto;
 import com.traveljoy.room.dto.ThemeDto;
 import com.traveljoy.room.entity.Location;
 import com.traveljoy.room.entity.Room;
@@ -10,7 +11,6 @@ import com.traveljoy.room.entity.RoomImage;
 import com.traveljoy.room.entity.Theme;
 import com.traveljoy.room.mapper.RoomMapper;
 import com.traveljoy.room.repository.*;
-import com.traveljoy.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -119,8 +119,10 @@ public class RoomServiceImpl implements RoomService {
         }
     }
 
-
-
+    @Override
+    public List<RoomShowDto> getRoomShowByLocationId(Long id) {
+        return roomRepository.getRoomShowByLocationId(id);
+    }
 
 
 }

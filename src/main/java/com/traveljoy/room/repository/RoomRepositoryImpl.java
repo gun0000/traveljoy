@@ -3,10 +3,13 @@ package com.traveljoy.room.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.traveljoy.admin.dto.AdminRoomListDto;
+import com.traveljoy.review.entity.QReview;
 import com.traveljoy.room.dto.RoomDto;
+import com.traveljoy.room.dto.RoomShowDto;
 import com.traveljoy.room.entity.QLocation;
 import com.traveljoy.room.entity.QRoom;
 import com.traveljoy.room.entity.QRoomImage;
@@ -108,6 +111,37 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
         roomDto.setImages(imageUrls);  // RoomDto의 images 리스트에 이미지 URL들을 설정
 
         return roomDto;
+    }
+
+    @Override
+    public List<RoomShowDto> getRoomShowByLocationId(Long id) {
+        QRoom room = QRoom.room;
+        QLocation qLocation = QLocation.location;
+        QRoomImage roomImage = QRoomImage.roomImage;
+        QReview review = QReview.review;
+
+        List<RoomShowDto> roomShowDtos = queryFactory
+                .select(Projections.constructor(
+                        RoomShowDto.class,
+                        roomImage.image,
+                        JPAExpressions
+                                .select(review.count())
+                                .from(review)
+                                .where(review.room.id.eq(room.id)),
+                        room.id,
+                        room.name,
+                        JPAExpressions
+                                .select(review.rating.avg().coalesce(0.0))
+                                .from(review)
+                                .where(review.room.id.eq(room.id)),
+                        room.price
+                ))
+                .from(room)
+                .join(room.Images, roomImage)
+                .where(room.location.id.eq(id), roomImage.isMain.isTrue())
+                .fetch();
+
+        return roomShowDtos;
     }
 
 }

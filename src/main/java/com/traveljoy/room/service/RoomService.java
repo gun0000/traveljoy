@@ -3,6 +3,7 @@ package com.traveljoy.room.service;
 import com.traveljoy.admin.dto.AdminRoomListDto;
 import com.traveljoy.room.dto.LocationDto;
 import com.traveljoy.room.dto.RoomDto;
+import com.traveljoy.room.dto.RoomShowDto;
 import com.traveljoy.room.dto.ThemeDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,4 +30,8 @@ public interface RoomService {
     RoomDto getRoomAndImagesListById(Long id);
 
     void updateRoom(RoomDto roomDto);
+    //지역번호로 숙소간단리스트 가져오기
+    List<RoomShowDto> getRoomShowByLocationId(Long id);
+
+
 }
