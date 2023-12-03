@@ -35,6 +35,12 @@ public class RoomController {
     public List<RoomShowDto> roomMainLocationShows(@PathVariable Long locationId){
         return roomService.getRoomShowByLocationId(locationId);
     }
+    //ajax 테마 숙소리스트
+    @GetMapping("/main/{themeId}/theme")
+    @ResponseBody
+    public List<RoomShowDto> roomMainThemeShows(@PathVariable Long themeId){
+        return roomService.getRoomShowByThemeId(themeId);
+    }
 //숙소검색페이지 //상품리스트보기
     @GetMapping("/search")
     public String roomSearch(){

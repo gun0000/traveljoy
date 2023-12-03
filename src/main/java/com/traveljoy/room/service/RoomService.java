@@ -32,6 +32,8 @@ public interface RoomService {
     void updateRoom(RoomDto roomDto);
     //지역번호로 숙소간단리스트 가져오기
     List<RoomShowDto> getRoomShowByLocationId(Long id);
+    //테마번호로 숙소간단리스트 가져오기
+    List<RoomShowDto> getRoomShowByThemeId(Long id);
 
 
 }

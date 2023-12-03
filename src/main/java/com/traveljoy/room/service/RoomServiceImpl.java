@@ -123,6 +123,10 @@ public class RoomServiceImpl implements RoomService {
     public List<RoomShowDto> getRoomShowByLocationId(Long id) {
         return roomRepository.getRoomShowByLocationId(id);
     }
+    @Override
+    public List<RoomShowDto> getRoomShowByThemeId(Long id) {
+        return roomRepository.getRoomShowByThemeId(id);
+    }
 
 
 }

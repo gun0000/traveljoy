@@ -183,10 +183,8 @@ input[type=text], input[type=submit], input[type=password], input[type=search], 
   }
 
   .filter-wrap ul {
-    overflow: hidden;
-    overflow-x: auto;
-    white-space: nowrap;
-    padding-right: 30px;
+    white-space: normal;
+    padding-right: 0;
   }
   .filter-wrap ul li {
     display: inline-block;

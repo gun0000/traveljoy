@@ -144,4 +144,35 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
         return roomShowDtos;
     }
 
+    @Override
+    public List<RoomShowDto> getRoomShowByThemeId(Long id) {
+        QRoom room = QRoom.room;
+        QLocation qLocation = QLocation.location;
+        QRoomImage roomImage = QRoomImage.roomImage;
+        QReview review = QReview.review;
+
+        List<RoomShowDto> roomShowDtos = queryFactory
+                .select(Projections.constructor(
+                        RoomShowDto.class,
+                        roomImage.image,
+                        JPAExpressions
+                                .select(review.count())
+                                .from(review)
+                                .where(review.room.id.eq(room.id)),
+                        room.id,
+                        room.name,
+                        JPAExpressions
+                                .select(review.rating.avg().coalesce(0.0))
+                                .from(review)
+                                .where(review.room.id.eq(room.id)),
+                        room.price
+                ))
+                .from(room)
+                .join(room.Images, roomImage)
+                .where(room.theme.id.eq(id), roomImage.isMain.isTrue())
+                .fetch();
+
+        return roomShowDtos;
+    }
+
 }
