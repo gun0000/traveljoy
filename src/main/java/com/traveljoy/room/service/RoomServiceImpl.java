@@ -127,6 +127,9 @@ public class RoomServiceImpl implements RoomService {
     public List<RoomShowDto> getRoomShowByThemeId(Long id) {
         return roomRepository.getRoomShowByThemeId(id);
     }
-
+    @Override
+    public List<RoomShowDto> getPopularRooms() {
+        return roomRepository.getPopularRooms();
+    }
 
 }

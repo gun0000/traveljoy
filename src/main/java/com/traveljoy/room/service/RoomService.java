@@ -34,6 +34,8 @@ public interface RoomService {
     List<RoomShowDto> getRoomShowByLocationId(Long id);
     //테마번호로 숙소간단리스트 가져오기
     List<RoomShowDto> getRoomShowByThemeId(Long id);
+    //인기숙소
+    List<RoomShowDto> getPopularRooms();
 
 
 }

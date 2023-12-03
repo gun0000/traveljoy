@@ -14,19 +14,24 @@ import com.traveljoy.room.entity.QLocation;
 import com.traveljoy.room.entity.QRoom;
 import com.traveljoy.room.entity.QRoomImage;
 import com.traveljoy.room.entity.QTheme;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @RequiredArgsConstructor
 public class RoomRepositoryImpl implements RoomRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
+    private final EntityManager entityManager;
 
     //관리자페이지 숙소 리스트
     @Override
@@ -116,7 +121,6 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
     @Override
     public List<RoomShowDto> getRoomShowByLocationId(Long id) {
         QRoom room = QRoom.room;
-        QLocation qLocation = QLocation.location;
         QRoomImage roomImage = QRoomImage.roomImage;
         QReview review = QReview.review;
 
@@ -139,6 +143,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                 .from(room)
                 .join(room.Images, roomImage)
                 .where(room.location.id.eq(id), roomImage.isMain.isTrue())
+                .limit(8)
                 .fetch();
 
         return roomShowDtos;
@@ -147,7 +152,6 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
     @Override
     public List<RoomShowDto> getRoomShowByThemeId(Long id) {
         QRoom room = QRoom.room;
-        QLocation qLocation = QLocation.location;
         QRoomImage roomImage = QRoomImage.roomImage;
         QReview review = QReview.review;
 
@@ -170,9 +174,35 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                 .from(room)
                 .join(room.Images, roomImage)
                 .where(room.theme.id.eq(id), roomImage.isMain.isTrue())
+                .limit(8)
                 .fetch();
 
         return roomShowDtos;
     }
+    @Override
+    public List<RoomShowDto> getPopularRooms() {
+        String sql = "SELECT r.id, r.name, r.price, ri.image, " +
+                "(SELECT COUNT(*) FROM review rv WHERE rv.room_id = r.id) AS reviewCount, " +
+                "COALESCE((SELECT AVG(rv.rating) FROM review rv WHERE rv.room_id = r.id), 0) AS reviewAverage " +
+                "FROM room r " +
+                "JOIN room_image ri ON r.id = ri.room_id " +
+                "WHERE ri.is_main = TRUE " +
+                "ORDER BY reviewCount DESC, reviewAverage DESC " +
+                "LIMIT 8";
 
+        List<Object[]> result = entityManager.createNativeQuery(sql, Object[].class).getResultList();
+        List<RoomShowDto> roomShowDtos = result.stream()
+            .map(row -> {
+                return new RoomShowDto(
+                        (String) row[3],       // room image
+                        ((Long) row[4]),  // review count
+                        ((Long) row[0]),  // room id
+                        (String) row[1],       // room name
+                        ((BigDecimal) row[5]).doubleValue(), // review average
+                        ((Long) row[2])); // room price
+            })
+            .collect(Collectors.toList());
+
+        return roomShowDtos;
+    }
 }
