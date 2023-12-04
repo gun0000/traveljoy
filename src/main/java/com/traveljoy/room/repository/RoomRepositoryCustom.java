@@ -18,9 +18,11 @@ public interface RoomRepositoryCustom {
     RoomDto getRoomAndImagesListById(Long id);
 
     //지역번호로 숙소간단리스트 가져오기
-    List<RoomShowDto> getRoomShowByLocationId(Long id);
+    List<RoomShowDto> getRoomShowByLocationId(Long id,int offset,int limit);
     //테마번호로 숙소간단리스트 가져오기
-    List<RoomShowDto> getRoomShowByThemeId(Long id);
+    List<RoomShowDto> getRoomShowByThemeId(Long id,int offset,int limit);
     //인기숙소
-    List<RoomShowDto> getPopularRooms();
+    List<RoomShowDto> getPopularRooms(int offset,int limit);
+    //최근본 숙소
+    List<RoomShowDto> getRecentRoomsByids(List<Long> ids);
 }

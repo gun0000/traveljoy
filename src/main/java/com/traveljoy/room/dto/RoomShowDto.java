@@ -14,6 +14,8 @@ public class RoomShowDto {
     private String name;
     private Double rating;
     private Long price;
+    private int offset = 1;
+    private int limit = 16;
 
     public RoomShowDto(String image, Long reviewCount, Long id, String name, Double rating, Long price) {
         this.image = image;

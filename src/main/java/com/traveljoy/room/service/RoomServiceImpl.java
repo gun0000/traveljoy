@@ -11,13 +11,18 @@ import com.traveljoy.room.entity.RoomImage;
 import com.traveljoy.room.entity.Theme;
 import com.traveljoy.room.mapper.RoomMapper;
 import com.traveljoy.room.repository.*;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -120,16 +125,33 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<RoomShowDto> getRoomShowByLocationId(Long id) {
-        return roomRepository.getRoomShowByLocationId(id);
+    public List<RoomShowDto> getRoomShowByLocationId(Long id,int offset,int limit) {
+        return roomRepository.getRoomShowByLocationId(id,offset,limit);
     }
     @Override
-    public List<RoomShowDto> getRoomShowByThemeId(Long id) {
-        return roomRepository.getRoomShowByThemeId(id);
+    public List<RoomShowDto> getRoomShowByThemeId(Long id,int offset,int limit) {
+        return roomRepository.getRoomShowByThemeId(id,offset,limit);
     }
     @Override
-    public List<RoomShowDto> getPopularRooms() {
-        return roomRepository.getPopularRooms();
+    public List<RoomShowDto> getPopularRooms(int offset,int limit) {
+        return roomRepository.getPopularRooms(offset,limit);
+    }
+
+    @Override
+    public List<RoomShowDto> getRecentRooms(HttpServletRequest request) {
+        String cookieName = "recentRooms";
+        Cookie cookie = Arrays.stream(request.getCookies())
+                .filter(c -> c.getName().equals(cookieName))
+                .findAny()
+                .orElse(null);
+
+        if(cookie == null) return Collections.emptyList();
+
+        String[] roomIds = cookie.getValue().split("_");
+        List<Long> idList = Arrays.stream(roomIds)
+                .map(Long::valueOf)
+                .collect(Collectors.toList());
+        return roomRepository.getRecentRoomsByids(idList);
     }
 
 }

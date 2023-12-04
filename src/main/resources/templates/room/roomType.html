@@ -7,6 +7,103 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
   <link rel="stylesheet" th:href="@{/css/font.css}">
   <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script>
+    // 페이지가 로드될 때 지역 숙소 리스트
+    let currentPage = 1; // 현재 페이지 번호를 추적하는 변수
+    let morePage = 1;
+    $(document).ready(function(){
+
+      getRoomList(1,true,currentPage);
+      $('#tag_1 a').addClass('active');
+
+      $(window).scroll(function() {
+        // 스크롤이 페이지 하단에 도달했는지 확인
+        if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+          morePage++; //증가
+          getRoomList(1,false,morePage); // 다음 페이지 데이터 로드
+        }
+      });
+
+      // 필터를 클릭하면 해당 필터에 맞는 숙소 리스트
+      $(".hashTagVal a").click(function() {
+        $(".hashTagVal a").removeClass("active");
+        $(this).addClass("active");
+        var id = $(this).parent().attr('id').replace('tag_', '');
+        getRoomList(id,true,currentPage);
+      });
+
+    });
+
+
+  </script>
+  <script>
+    // 숙소 리스트
+    function getRoomList(id,removeExisting,currentPage) {
+      var path = window.location.pathname;
+      var ajaxurl;
+      var start = (currentPage - 1) * 8;
+
+      if(path === '/room/region') {
+        ajaxurl = "/room/main/" + id + "/location/" + start + "/8";
+      }
+      else if(path === '/room/theme') {
+        ajaxurl = "/room/main/" + id + "/theme/" + start + "/8";
+      }
+      else if(path === '/room/popular') {
+        ajaxurl = "/room/main/popular/" + start + "/8";
+      }
+      $('#loadingCircle').show(); //로딩바 보여주기
+      $.ajax({
+        url: ajaxurl,
+        type: 'GET',
+        success: function(data) {
+          $('#loadingCircle').hide();// 로딩 바 숨기기
+          console.log(data);
+
+          if (removeExisting) {
+            // removeExisting가 true일 때만 기존의 숙소 리스트를 삭제
+            $("#room-wrapper").empty();
+          }
+          if (data.length === 0) {
+            $('#noRoomMessage').show();
+          } else {
+            $('#noRoomMessage').hide();
+            // 새로운 숙소 리스트를 추가
+            data.forEach(function (room) {
+              var roomItem = `
+                            <div class="room-item">
+                                <a href="/room/detail/${room.id}">
+                                    <div class="room-item-box-img">
+                                        <img class="room-item-img" src="/images/roomimage/${room.image}" alt="">
+                                    </div>
+                                    <div class="room-item-content">
+                                        <div class="room-item-title">${room.name}</div>
+                                        <div class="room-item-score-review">
+                                            <div class="room-item-score">
+                                                <span>${room.rating}</span>
+                                                <span>/</span>
+                                                <span>5</span>
+                                            </div>
+                                            <div class="room-item-review">
+                                                이용자 리뷰 ${room.reviewCount}개
+                                            </div>
+                                        </div>
+                                        <div class="room-item-price">${room.price.toLocaleString()}원</div>
+                                    </div>
+                                </a>
+                            </div>`;
+              $("#room-wrapper").append(roomItem);
+            });
+          }
+        },
+        error: function(error) {
+          $('#loadingCircle').hide();
+          console.log('Error: ' + error);
+        }
+      });
+    }
+  </script>
   <style>
       .room-item{
         width: 295.5px;
@@ -26,133 +123,38 @@
     <!--더보기화면-->
     <section class="py-5">
       <div class="container px-4 px-lg-5 mt-5">
-          <p class="page-title">지역,테마,인기숙소</p>
+          <p class="page-title" th:text="${type}"></p>
           <!--필터부분--><!--인기숙소이면 필터없음-->
-          <div class="filter-wrap">
-            <ul class="js_toggle2">
-              <div id="hashTagListBox">
-                <li id="tag_all" class="active"><a href="javascript:setHashTagBySearch('all')">서울</a></li>
-                <li id="tag_109" class="hashTagVal"><a href="javascript:setHashTagBySearch('109')">대전</a></li>
-                <li id="tag_113" class="hashTagVal"><a href="javascript:setHashTagBySearch('113')">광주</a></li>
-                <li id="tag_106" class="hashTagVal"><a href="javascript:setHashTagBySearch('106')">부산</a></li>
-              </div>
-            </ul>
-            <a href="javascript:void(0)" class="btn-open"></a>
+          <div id="filter-wrap">
+            <div class="filter-wrap" >
+              <ul>
+                <li th:each="location : ${locations}" th:id="'tag_' + ${location.id}" class="hashTagVal">
+                  <a href="javascript:void(0);" th:onclick="'getRoomLocationList(\'' + ${location.id} + '\');'" th:text="${location.name}"></a>
+                </li>
+              </ul>
+              <a href="javascript:void(0)" class="btn-open"></a>
+            </div>
+            <!--필터부분-->
+            <div class="filter-wrap" >
+              <ul>
+                <li th:each="theme : ${themes}" th:id="'tag_' + ${theme.id}" class="hashTagVal">
+                  <a href="javascript:void(0);" th:onclick="'getRoomThemeList(\'' + ${theme.id} + '\');'" th:text="${theme.name}"></a>
+                </li>
+              </ul>
+              <a href="javascript:void(0)" class="btn-open"></a>
+            </div>
           </div>
-          
           <div class="">          
             <!-- 다른 아이템들 -->
             <div class="container ">
-              <div class="row row-cols-3 row-cols-sm-3 row-cols-md-3 room-item-container justify-content-evenly" >
+              <div id="room-wrapper" class="row row-cols-3 row-cols-sm-3 row-cols-md-3 room-item-container justify-content-evenly" >
                 <!-- 아이템 -->
-                <div class="room-item">
-                  <a href="">
-                    <!--아이템 이미지-->
-                    <div>
-                      <img class="room-item-img" src="/images/test.jpg" alt="">
-                    </div>
-                    <!--아이템 내용-->
-                    <div class="room-item-content">
-                      <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
-                      <div class="room-item-score-review">
-                        <div class="room-item-score">
-                          <span>4.3</span>
-                          <span>/</span>
-                          <span>5</span>
-                        </div>
-                        <div class="room-item-review">
-                          이용자 리뷰 1,171개
-                        </div>
-                      </div>
-                      <div class="room-item-price">
-                        63,342원
-                      </div>
-                    </div>
-                  </a>
-                </div>
-                <!-- 아이템 -->
-                <div class="room-item">
-                  <a href="">
-                    <!--아이템 이미지-->
-                    <div>
-                      <img class="room-item-img" src="/img/test.jpg" alt="">
-                    </div>
-                    <!--아이템 내용-->
-                    <div class="room-item-content">
-                      <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
-                      <div class="room-item-score-review">
-                        <div class="room-item-score">
-                          <span>4.3</span>
-                          <span>/</span>
-                          <span>5</span>
-                        </div>
-                        <div class="room-item-review">
-                          이용자 리뷰 1,171개
-                        </div>
-                      </div>
-                      <div class="room-item-price">
-                        63,342원
-                      </div>
-                    </div>
-                  </a>
-                </div>
-                <!-- 아이템 -->
-                <div class="room-item">
-                  <a href="">
-                    <!--아이템 이미지-->
-                    <div>
-                      <img class="room-item-img" src="/img/test.jpg" alt="">
-                    </div>
-                    <!--아이템 내용-->
-                    <div class="room-item-content">
-                      <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
-                      <div class="room-item-score-review">
-                        <div class="room-item-score">
-                          <span>4.3</span>
-                          <span>/</span>
-                          <span>5</span>
-                        </div>
-                        <div class="room-item-review">
-                          이용자 리뷰 1,171개
-                        </div>
-                      </div>
-                      <div class="room-item-price">
-                        63,342원
-                      </div>
-                    </div>
-                  </a>
-                </div>
-                <!-- 아이템 -->
-                <div class="room-item">
-                  <a href="">
-                    <!--아이템 이미지-->
-                    <div>
-                      <img class="room-item-img" src="/img/test.jpg" alt="">
-                    </div>
-                    <!--아이템 내용-->
-                    <div class="room-item-content">
-                      <div class="room-item-title">호텔 스카이파크 킹스타운 동대문점</div>
-                      <div class="room-item-score-review">
-                        <div class="room-item-score">
-                          <span>4.3</span>
-                          <span>/</span>
-                          <span>5</span>
-                        </div>
-                        <div class="room-item-review">
-                          이용자 리뷰 1,171개
-                        </div>
-                      </div>
-                      <div class="room-item-price">
-                        63,342원
-                      </div>
-                    </div>
-                  </a>
-
-
               </div>
+              <div class="loading_circle" id="loadingCircle" style="display: none;"></div>
+              <div class="noRoomMessage" id="noRoomMessage" style="display: none; margin: 150px;">등록된 숙소가 없습니다.</div>
             </div>
           </div>
-      </div>
+        </div>
     </section>
 
 

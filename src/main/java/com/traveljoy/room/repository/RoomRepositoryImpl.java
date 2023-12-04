@@ -119,7 +119,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
     }
 
     @Override
-    public List<RoomShowDto> getRoomShowByLocationId(Long id) {
+    public List<RoomShowDto> getRoomShowByLocationId(Long id,int offset,int limit) {
         QRoom room = QRoom.room;
         QRoomImage roomImage = QRoomImage.roomImage;
         QReview review = QReview.review;
@@ -143,14 +143,15 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                 .from(room)
                 .join(room.Images, roomImage)
                 .where(room.location.id.eq(id), roomImage.isMain.isTrue())
-                .limit(8)
+                .offset(offset)
+                .limit(limit)
                 .fetch();
 
         return roomShowDtos;
     }
 
     @Override
-    public List<RoomShowDto> getRoomShowByThemeId(Long id) {
+    public List<RoomShowDto> getRoomShowByThemeId(Long id,int offset,int limit) {
         QRoom room = QRoom.room;
         QRoomImage roomImage = QRoomImage.roomImage;
         QReview review = QReview.review;
@@ -174,13 +175,14 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                 .from(room)
                 .join(room.Images, roomImage)
                 .where(room.theme.id.eq(id), roomImage.isMain.isTrue())
-                .limit(8)
+                .offset(offset)
+                .limit(limit)
                 .fetch();
 
         return roomShowDtos;
     }
     @Override
-    public List<RoomShowDto> getPopularRooms() {
+    public List<RoomShowDto> getPopularRooms(int offset,int limit) {
         String sql = "SELECT r.id, r.name, r.price, ri.image, " +
                 "(SELECT COUNT(*) FROM review rv WHERE rv.room_id = r.id) AS reviewCount, " +
                 "COALESCE((SELECT AVG(rv.rating) FROM review rv WHERE rv.room_id = r.id), 0) AS reviewAverage " +
@@ -188,7 +190,8 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                 "JOIN room_image ri ON r.id = ri.room_id " +
                 "WHERE ri.is_main = TRUE " +
                 "ORDER BY reviewCount DESC, reviewAverage DESC " +
-                "LIMIT 8";
+                "LIMIT " + limit + " " +
+                "OFFSET "+offset;
 
         List<Object[]> result = entityManager.createNativeQuery(sql, Object[].class).getResultList();
         List<RoomShowDto> roomShowDtos = result.stream()
@@ -202,6 +205,36 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                         ((Long) row[2])); // room price
             })
             .collect(Collectors.toList());
+
+        return roomShowDtos;
+    }
+    @Override
+    public List<RoomShowDto> getRecentRoomsByids(List<Long> ids) {
+        QRoom room = QRoom.room;
+        QRoomImage roomImage = QRoomImage.roomImage;
+        QReview review = QReview.review;
+
+        List<RoomShowDto> roomShowDtos = queryFactory
+                .select(Projections.constructor(
+                        RoomShowDto.class,
+                        roomImage.image,
+                        JPAExpressions
+                                .select(review.count())
+                                .from(review)
+                                .where(review.room.id.eq(room.id)),
+                        room.id,
+                        room.name,
+                        JPAExpressions
+                                .select(review.rating.avg().coalesce(0.0))
+                                .from(review)
+                                .where(review.room.id.eq(room.id)),
+                        room.price
+                ))
+                .from(room)
+                .join(room.Images, roomImage)
+                .where(room.id.in(ids), roomImage.isMain.isTrue())
+                .limit(16)
+                .fetch();
 
         return roomShowDtos;
     }
