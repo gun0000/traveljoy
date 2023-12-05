@@ -1,10 +1,7 @@
 package com.traveljoy.room.service;
 
 import com.traveljoy.admin.dto.AdminRoomListDto;
-import com.traveljoy.room.dto.LocationDto;
-import com.traveljoy.room.dto.RoomDto;
-import com.traveljoy.room.dto.RoomShowDto;
-import com.traveljoy.room.dto.ThemeDto;
+import com.traveljoy.room.dto.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +36,12 @@ public interface RoomService {
     List<RoomShowDto> getPopularRooms(int offset,int limit);
     //최근본 숙소
     List<RoomShowDto> getRecentRooms(HttpServletRequest request);
+    //숙소 검색
+    List<RoomShowDto> getRoomShowBySearch(String search,int offset,int limit);
+    //숙소 상세
+    RoomDetailDto getRoomDetail(Long roomId);
+
+
 
 
 }

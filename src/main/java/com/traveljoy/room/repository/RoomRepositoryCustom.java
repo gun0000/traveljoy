@@ -1,6 +1,7 @@
 package com.traveljoy.room.repository;
 
 import com.traveljoy.admin.dto.AdminRoomListDto;
+import com.traveljoy.room.dto.RoomDetailDto;
 import com.traveljoy.room.dto.RoomDto;
 import com.traveljoy.room.dto.RoomShowDto;
 import org.springframework.data.domain.Page;
@@ -25,4 +26,8 @@ public interface RoomRepositoryCustom {
     List<RoomShowDto> getPopularRooms(int offset,int limit);
     //최근본 숙소
     List<RoomShowDto> getRecentRoomsByids(List<Long> ids);
+    //숙소 검색
+    List<RoomShowDto> getRoomShowBySearch(String search,int offset,int limit);
+    //숙소 상세
+    RoomDetailDto getRoomDetail(Long roomId);
 }

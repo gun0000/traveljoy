@@ -1,6 +1,7 @@
 package com.traveljoy.room.controller;
 
 import com.traveljoy.room.dto.LocationDto;
+import com.traveljoy.room.dto.RoomDetailDto;
 import com.traveljoy.room.dto.RoomShowDto;
 import com.traveljoy.room.dto.ThemeDto;
 import com.traveljoy.room.service.RoomService;
@@ -57,9 +58,16 @@ public class RoomController {
     public List<RoomShowDto> roomMainRecentCookieShows(HttpServletRequest request){
         return roomService.getRecentRooms(request);
     }
+    //ajax 검색 숙소리스트
+    @GetMapping("/main/search/{searchKeyword}/{offset}/{limit}")
+    @ResponseBody
+    public List<RoomShowDto> roomMainSearchShows(@PathVariable String searchKeyword,@PathVariable int offset,@PathVariable int limit){
+        return roomService.getRoomShowBySearch(searchKeyword, offset, limit);
+    }
 //숙소검색페이지 //상품리스트보기
     @GetMapping("/search")
-    public String roomSearch(){
+    public String search(@RequestParam String searchKeyword, Model model) {
+        model.addAttribute("searchKeyword", searchKeyword);
         return "room/roomSearch";
     }
 //지역,테마,인기숙소 페이지 //상품리스트보기
@@ -89,8 +97,10 @@ public class RoomController {
     }
     //숙소상세페이지 //상품보기
     @GetMapping("/detail/{roomId}")
-    public String roomDetail(@PathVariable Long roomId, HttpServletRequest request, HttpServletResponse response){
+    public String roomDetail(@PathVariable Long roomId, HttpServletRequest request, HttpServletResponse response,Model model){
         addRoomIdToCookie(roomId, request, response);
+        RoomDetailDto roomDetailDto = roomService.getRoomDetail(roomId);
+        model.addAttribute("room", roomDetailDto);
         return "room/roomDetail";
     }
     private void addRoomIdToCookie(Long roomId, HttpServletRequest request, HttpServletResponse response) {

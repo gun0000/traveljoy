@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,14 +10,54 @@
   
   <!-- flatpickr -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://npmcdn.com/flatpickr/dist/l10n/ko.js"></script>
   <style>
       .justify-content-space-between{justify-content: space-between;}
   </style>
-  <style>
+    <!--카카오맵-->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f4dd8fe5910ea0ebe66e44e68d2a7493&libraries=services,clusterer,drawing"></script>
+    <script th:inline="javascript">
 
-  </style>
+        var map;
+        var marker;
+
+        function initMap() {
+            // 사용자의 현재 위치
+            //<![CDATA[
+            var latitude = /*[[${room.locationY}]]*/ 37.56413895923679;
+            var longitude = /*[[${room.locationX}]]*/ 126.97718160053579;
+            //]]>
+
+            var initialLatLng = new kakao.maps.LatLng(latitude, longitude);
+
+            var mapOptions = {
+                center: initialLatLng,
+                level: 2
+            };
+
+            // 지도 생성
+            map = new kakao.maps.Map(document.getElementById('map'), mapOptions);
+
+            // 마커 생성
+            marker = new kakao.maps.Marker({
+                position: map.getCenter(),
+                draggable: true // 마커를 드래그할 수 있도록 설정
+            });
+            marker.setMap(map);
+
+            // 주소 값을 가져와서 마커를 생성
+            var address = document.getElementById('address').value;
+            createMarker(address);
+
+        }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            initMap();//맵실행
+        });//$(document).ready(function(){ !end!
+    </script>
 </head>
 <body>
     <!--헤더공통영역-->
@@ -34,18 +74,13 @@
                     <!-- 숙소 헤더부분-->
                     <header class="mb-1">
                         <!-- 숙소이름부분-->
-                        <h1 class="fw-bolder mb-1">숙소이름</h1>
+                        <h1 class="fw-bolder mb-1" th:text="${room.name}"></h1>
                         <!--필터부분-->
                         <div class="filter-wrap mt-3">
                           <ul class="js_toggle2">
-                            <div id="hashTagListBox">
-                              <li id="tag_all" class="active"><a href="javascript:setHashTagBySearch('all')">서울</a></li>
-                              <li id="tag_109" class="hashTagVal"><a href="javascript:setHashTagBySearch('109')">대전</a></li>
-                              <li id="tag_113" class="hashTagVal"><a href="javascript:setHashTagBySearch('113')">광주</a></li>
-                              <li id="tag_106" class="hashTagVal"><a href="javascript:setHashTagBySearch('106')">부산</a></li>
-                            </div>
+                              <li  class="hashTagVal"><a th:text="${room.locationName}"></a></li>
+                              <li  class="hashTagVal"><a th:text="${room.themeName}"></a></li>
                           </ul>
-                          <a href="javascript:void(0)" class="btn-open"></a>
                         </div>
                     </header>
                 </article>
@@ -62,29 +97,24 @@
             <div class="col-lg-12">
                 <!-- 숙소보기-->
                 <article class="container">
-                  <!-- 상품 이미지-->
-                  <div class="row">
-                    <div class="col-6">
-                      <figure class=""><img class="img-fluid rounded" src="https://dummyimage.com/624x316/ced4da/6c757d.jpg" alt="...">
-                      </figure>
+                    <div class="row">
+                        <div class="col-6">
+                            <figure th:each="image, stat : ${room.image}" th:if="${stat.index} == 0">
+                                <img class="img-fluid rounded" th:src="'/images/roomimage/'+${image}" alt="..." style="width: 624px; height: 316px;">
+                            </figure>
+                        </div>
+                        <div class="col-3">
+                            <figure th:each="image, stat : ${room.image}" th:if="${stat.index} % 2 == 1">
+                                <img class="img-fluid rounded" th:src="'/images/roomimage/'+${image}" alt="..." style="width: 300px; height: 150px;">
+                            </figure>
+                        </div>
+                        <div class="col-3">
+                            <figure th:each="image, stat : ${room.image}" th:if="${stat.index} % 2 == 0 and ${stat.index} != 0">
+                                <img class="img-fluid rounded" th:src="'/images/roomimage/'+${image}" alt="..." style="width: 300px; height: 150px;">
+                            </figure>
+                        </div>
                     </div>
-                    <div class="col-3">
-                      <figure class=""><img class="img-fluid rounded" src="https://dummyimage.com/300x150/ced4da/6c757d.jpg" alt="...">
-                      </figure>
-                      <figure class=""><img class="img-fluid rounded" src="https://dummyimage.com/300x150/ced4da/6c757d.jpg" alt="...">
-                      </figure>
-                    </div>
-                    <div class="col-3">
-                      <figure class=""><img class="img-fluid rounded" src="https://dummyimage.com/300x150/ced4da/6c757d.jpg" alt="...">
-                      </figure>
-                      <figure class=""><img class="img-fluid rounded" src="https://dummyimage.com/300x150/ced4da/6c757d.jpg" alt="...">
-                      </figure>
-                    </div>
-                  </div>  
-                    
-                    
                 </article>
-                <!-- 리뷰 부분-->
             </div>
           </div>
         </div>
@@ -101,23 +131,15 @@
                 <article>
                     <!-- 상품 부분-->
                     <section class="mb-5">
-                        <div class="fs-5 mb-4">상품내용
-                          <div>
-                            이불, 베개, 세면용품은 제공되지 않습니다.
-
-촬영 목적으로 이용하는 게스트 분들을 위해 다락방 컨셉의 퀸사이즈 토퍼2개, 담요, 쿠션을 제공해드리고 있습니다.
-숙소
-복층 구조로 5m 층고의 개방감을 즐길수 있습니다.
-게스트 이용 가능 공간/시설
-* 에어컨, 선풍기, 와이파이, 냉장고, 전자레인지, 2구 가스레인지, 에어프라이어, 기본식기 및 잔, 와인오프너 구비
-                          </div>
+                        <div class="fs-5 mb-4">내용
+                          <div th:text="${room.description}"></div>
                         </div>
-                        <div class="fs-5 mb-4">상품 지역
-                          <figure class=""><img class="img-fluid rounded" src="https://dummyimage.com/700x400/ced4da/6c757d.jpg" alt="...">
-                          </figure>
+                        <div class="fs-5 mb-4">지역
+                            <div th:text="'상세주소: '+${room.address}"></div>
+                            <div id="map" style="width: 650px; height: 400px;"></div>
                         </div>
-                        <div class="fs-5 mb-4">상품 리뷰</div>
-                        <div class="fs-5 mb-4">4.90 후기 21개</div>
+                        <div class="fs-5 mb-4">리뷰</div>
+                        <div class="fs-5 mb-4" th:text="${room.rating}+ ' 후기 ' + ${room.reviewCount} + '개'"></div>
                     </section>
                 </article>
                 <!-- 리뷰 부분-->
@@ -135,26 +157,48 @@
                         </div>
                     </div>
                 </section>
+                <section class="mb-5" th:each="review : ${room.roomReviewDto}">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <img class="rounded-circle" src="/images/basicuser.svg" alt="...">
+                                </div>
+                                <div class="ms-3">
+                                    <div class="fw-bold" th:text="${review.reviewMemberName}">구매자 별명</div>
+                                    <div th:text="${review.reviewContent}">리뷰 내용</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
             <!-- 예약부분 -->
             <div class="col-lg-4">
                 <!-- 예약부분-->
                 <div class="card mb-4">
                     <div class="card-body">
-                      <div>140,000원/박</div>
-                      <div>4.90 후기 21개</div>
-                      <div>체크인</div>
-                      <div>체크아웃</div>
-                      <div>인원</div>
+                      <div id="price">원/박</div>
+                        <script th:inline="javascript">
+                            //<![CDATA[
+                            var price = /*[[${room.price}]]*/ 'room.price';
+                            document.getElementById('price').innerText = numberWithCommas(price) + '원/박';
+
+                            function numberWithCommas(x) {
+                                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            }
+                            //]]>
+                        </script>
+                      <div th:text="${room.rating}+ ' 후기 ' + ${room.reviewCount} + '개'"></div>
                       <!---->
                       <div>
                         <label for="date-range">체크인 - 체크아웃:</label>
                         <input type="text" id="date-range" name="date-range">
                       </div>
                       <div>
-                        <div id="dropdown" style="display: inline-block; position: relative;">
+                        <div id="dropdown">
                           <button id="total-button">총 인원: <span id="total">1</span>명</button>
-                          <div id="dropdown-content" style="display: none; position: absolute; min-width: 160px;">
+                          <div id="dropdown-content" style="display: none;">
                             <div>
                               <label for="adults">성인:</label>
                               <button id="minus-adults">-</button>

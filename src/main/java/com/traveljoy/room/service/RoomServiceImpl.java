@@ -1,10 +1,7 @@
 package com.traveljoy.room.service;
 
 import com.traveljoy.admin.dto.AdminRoomListDto;
-import com.traveljoy.room.dto.LocationDto;
-import com.traveljoy.room.dto.RoomDto;
-import com.traveljoy.room.dto.RoomShowDto;
-import com.traveljoy.room.dto.ThemeDto;
+import com.traveljoy.room.dto.*;
 import com.traveljoy.room.entity.Location;
 import com.traveljoy.room.entity.Room;
 import com.traveljoy.room.entity.RoomImage;
@@ -153,5 +150,13 @@ public class RoomServiceImpl implements RoomService {
                 .collect(Collectors.toList());
         return roomRepository.getRecentRoomsByids(idList);
     }
+    @Override
+    public List<RoomShowDto> getRoomShowBySearch(String search,int offset,int limit) {
+        return roomRepository.getRoomShowBySearch(search, offset, limit);
+    }
 
+    @Override
+    public RoomDetailDto getRoomDetail(Long roomId) {
+        return roomRepository.getRoomDetail(roomId);
+    }
 }

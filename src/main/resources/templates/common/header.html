@@ -11,11 +11,13 @@
                 <li><a href="#" class="nav-link px-2 link-body-emphasis">고객센터</a></li>
             </ul>
             <div class="form-search">
-                <input type="text" placeholder="여행지, 명소, 호텔 등으로 검색" id="searchKeywordParam">
-                <button class="btn-search" onclick="location.href='/room/search'">
-                    <i class="ico-search"></i>
-                    <span class="hidden">검색</span>
-                </button>
+                <form action="/room/search" method="GET">
+                    <input type="text" placeholder="여행지, 명소, 호텔 등으로 검색" id="searchKeywordParam" name="searchKeyword">
+                    <button class="btn-search" type="submit">
+                        <i class="ico-search"></i>
+                        <span class="hidden">검색</span>
+                    </button>
+                </form>
             </div>
             <div th:if="${#authentication.name == 'anonymousUser'}">
                 <a href="/member/login">로그인</a>

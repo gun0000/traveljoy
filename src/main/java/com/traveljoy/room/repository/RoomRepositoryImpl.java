@@ -2,12 +2,14 @@ package com.traveljoy.room.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.traveljoy.admin.dto.AdminRoomListDto;
 import com.traveljoy.review.entity.QReview;
+import com.traveljoy.room.dto.RoomDetailDto;
 import com.traveljoy.room.dto.RoomDto;
 import com.traveljoy.room.dto.RoomShowDto;
 import com.traveljoy.room.entity.QLocation;
@@ -238,4 +240,110 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
 
         return roomShowDtos;
     }
+
+    @Override
+    public List<RoomShowDto> getRoomShowBySearch(String search,int offset,int limit) {
+        QRoom room = QRoom.room;
+        QRoomImage roomImage = QRoomImage.roomImage;
+        QReview review = QReview.review;
+
+        QLocation location = QLocation.location;
+        QTheme theme = QTheme.theme;
+
+        List<RoomShowDto> roomShowDtos = queryFactory
+                .select(Projections.constructor(
+                        RoomShowDto.class,
+                        roomImage.image,
+                        JPAExpressions
+                                .select(review.count())
+                                .from(review)
+                                .where(review.room.id.eq(room.id)),
+                        room.id,
+                        room.name,
+                        JPAExpressions
+                                .select(review.rating.avg().coalesce(0.0))
+                                .from(review)
+                                .where(review.room.id.eq(room.id)),
+                        room.price
+                ))
+                .from(room)
+                .join(room.Images, roomImage)
+                .where(location.name.eq(search)
+                                .or(theme.name.eq(search))
+                                .or(room.name.contains(search)),
+                        roomImage.isMain.isTrue())
+                .offset(offset)
+                .limit(limit)
+                .fetch();
+
+        return roomShowDtos;
+    }
+
+    @Override
+    public RoomDetailDto getRoomDetail(Long roomId) {
+        QRoom room = QRoom.room;
+        QRoomImage roomImage = QRoomImage.roomImage;
+        QReview review = QReview.review;
+        QLocation location = QLocation.location;
+        QTheme theme = QTheme.theme;
+
+        RoomDetailDto roomDetailDto = queryFactory
+                .select(Projections.fields(
+                        RoomDetailDto.class,
+                        room.id,
+                        room.name,
+                        room.price,
+                        room.description,
+                        room.address,
+                        room.locationX,
+                        room.locationY,
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(review.rating.avg().coalesce(0.0))
+                                        .from(review)
+                                        .where(review.room.id.eq(room.id)),
+                                "rating"),
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(review.count())
+                                        .from(review)
+                                        .where(review.room.id.eq(room.id)),
+                                "reviewCount"),
+                        ExpressionUtils.as(
+                                room.location.name,
+                                "locationName"),
+                        ExpressionUtils.as(
+                                room.theme.name,
+                                "themeName")
+                ))
+                .from(room)
+                .where(room.id.eq(roomId))
+                .fetchFirst();
+
+
+        List<String> images = queryFactory
+                .select(roomImage.image)
+                .from(roomImage)
+                .where(roomImage.room.id.eq(roomId))
+                .fetch();
+
+        roomDetailDto.setImage(images);
+
+        List<RoomDetailDto.RoomReviewDto> reviews = queryFactory
+                .select(Projections.fields(
+                        RoomDetailDto.RoomReviewDto.class,
+                        review.member.name,
+                        review.content,
+                        review.rating,
+                        review.reviewImage
+                ))
+                .from(review)
+                .where(review.room.id.eq(roomId))
+                .fetch();
+        roomDetailDto.setRoomReviewDto(reviews);
+
+        return roomDetailDto;
+    }
+
+
 }
