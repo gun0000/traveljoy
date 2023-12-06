@@ -134,12 +134,15 @@
                         <div class="fs-5 mb-4">내용
                           <div th:text="${room.description}"></div>
                         </div>
+                        <hr class="hr-ebebeb" style="background: #c9c9c9;border: 0;height: 1px;margin: 4px 0 16px;">
                         <div class="fs-5 mb-4">지역
                             <div th:text="'상세주소: '+${room.address}"></div>
                             <div id="map" style="width: 650px; height: 400px;"></div>
                         </div>
+                        <hr class="hr-ebebeb" style="background: #c9c9c9;border: 0;height: 1px;margin: 4px 0 16px;">
                         <div class="fs-5 mb-4">리뷰</div>
                         <div class="fs-5 mb-4" th:text="${room.rating}+ ' 후기 ' + ${room.reviewCount} + '개'"></div>
+                        <hr class="hr-ebebeb" style="background: #c9c9c9;border: 0;height: 1px;margin: 4px 0 16px;">
                     </section>
                 </article>
                 <!-- 리뷰 부분-->
@@ -197,12 +200,12 @@
                       </div>
                       <div>
                         <div id="dropdown">
-                          <button id="total-button">총 인원: <span id="total">1</span>명</button>
+                          <button id="total-button">총 인원: <span id="total">0</span>명</button>
                           <div id="dropdown-content" style="display: none;">
                             <div>
                               <label for="adults">성인:</label>
                               <button id="minus-adults">-</button>
-                              <span id="adults">1</span>
+                              <span id="adults">0</span>
                               <button id="plus-adults">+</button>
                             </div>
                             <div>
@@ -214,10 +217,58 @@
                           </div>
                         </div>
                       </div>
-                      <!--예약하기--> 
-                      <div class="btn-wrap">
-                        <a href="javascript:void(0);" class="btn-type full" id="aBtnLogin" onclick="location.href='/reserve/roomReserve'">예약하기</a>
-                      </div>
+                      <!--예약하기-->
+                        <form id="form" action="/reserve/roomReserve" method="post">
+                            <input type="hidden" id="hidden-room" name="roomId" th:value="${room.id}">
+                            <input type="hidden" id="hidden-checkIn" name="checkIn">
+                            <input type="hidden" id="hidden-checkOut" name="checkOut">
+                            <input type="hidden" id="hidden-total" name="total">
+                            <input type="hidden" id="hidden-adults" name="adults">
+                            <input type="hidden" id="hidden-children" name="children">
+                            <div class="btn-wrap">
+                                <button type="submit"  class="btn-type full"id="aBtnLogin">예약하기</button>
+                            </div>
+                        </form>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                // 성인, 어린이 수 변경 이벤트
+                                ['plus-adults', 'minus-adults', 'plus-children', 'minus-children'].forEach(function(id) {
+                                    document.getElementById(id).addEventListener('click', function () {
+                                        // 성인수와 어린이수를 숫자로 변환하여 더함
+                                        var total = Number(document.getElementById('adults').textContent) + Number(document.getElementById('children').textContent);
+
+                                        // 총 인원수 업데이트
+                                        document.getElementById('total').textContent = total;
+                                        document.getElementById('hidden-total').value = total;
+                                    });
+                                });
+
+                                document.getElementById('date-range').addEventListener('change', function () {
+                                    // 체크인, 체크아웃 날짜 분리
+                                    var dates = this.value.split('~').map(date => date.trim());
+                                    document.getElementById('hidden-checkIn').value = dates[0];
+                                    document.getElementById('hidden-checkOut').value = dates[1];
+                                });
+
+                                // 성인 수 변경 이벤트
+                                document.getElementById('plus-adults').addEventListener('click', function () {
+                                    document.getElementById('hidden-adults').value = document.getElementById('adults').textContent;
+                                });
+                                document.getElementById('minus-adults').addEventListener('click', function () {
+                                    document.getElementById('hidden-adults').value = document.getElementById('adults').textContent;
+                                });
+
+                                // 어린이 수 변경 이벤트
+                                document.getElementById('plus-children').addEventListener('click', function () {
+                                    document.getElementById('hidden-children').value = document.getElementById('children').textContent;
+                                });
+                                document.getElementById('minus-children').addEventListener('click', function () {
+                                    document.getElementById('hidden-children').value = document.getElementById('children').textContent;
+                                });
+                            });
+                        </script>
+
+
                     </div>
                 </div>
             </div>
