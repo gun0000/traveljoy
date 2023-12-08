@@ -1,22 +1,23 @@
 package com.traveljoy.reservation.controller;
 
+import com.traveljoy.member.service.MemberPrincipal;
+import com.traveljoy.reservation.dto.ReservationDto;
 import com.traveljoy.reservation.dto.ReservationShowDto;
 import com.traveljoy.reservation.service.ReservationService;
-import com.traveljoy.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Validated
@@ -63,7 +64,19 @@ public class ReservationController {
     }
     //결제하기
     @PostMapping("/{roomId}/payment")
-    public String roomReservePay(){
-        return "room/roomReserve";
+    @ResponseBody
+    public ResponseEntity<Map<String, Boolean>> roomReservePay(@RequestBody ReservationDto reservationDto){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MemberPrincipal MemberPrincipal = (MemberPrincipal) authentication.getPrincipal();
+        Long memberId = MemberPrincipal.getId();
+        reservationDto.setMemberId(memberId);
+
+        reservationService.saveReservation(reservationDto);
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("success", true);
+
+        return ResponseEntity.ok(response);
     }
 }

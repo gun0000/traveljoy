@@ -7,6 +7,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" th:href="@{/css/font.css}">
   <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
   <style>
     .terms {
       margin: 0px auto;
@@ -119,7 +121,7 @@
                     <div class="fs-5 mb-3" style="display: flex; align-items: center;">
                       <div style="margin-right: 15px;">예약자 이름 : </div>
                       <div><label>
-                        <input type="text" placeholder="예약자 이름을 입력해 주세요." style="height: 40px; width: 250px;">
+                        <input id="nameInput" type="text" placeholder="예약자 이름을 입력해 주세요." style="height: 40px; width: 250px;">
                       </label></div>
                     </div>
                     <div class="fs-5 mb-3" th:text="'예약자 이메일 : '+${reservation.email}">
@@ -175,15 +177,27 @@
                         </div>
                       </div>
                       <script>
-                        document.getElementById('checkAll').addEventListener('change', function() {
-                          var checkboxes = document.querySelectorAll('.required');
-                          for (var i = 0; i < checkboxes.length; i++) {
-                            checkboxes[i].checked = this.checked;
-                          }
-                        });
+                        let checkAll = document.getElementById('checkAll');
+                        let requiredCheckboxes = Array.from(document.querySelectorAll('.required'));
+
+                          checkAll.addEventListener('change', function() {
+                            requiredCheckboxes.forEach(checkbox => {
+                              checkbox.checked = this.checked;
+                            });
+                          });
+
+                          requiredCheckboxes.forEach(checkbox => {
+                            checkbox.addEventListener('change', function() {
+                              if (requiredCheckboxes.every(checkbox => checkbox.checked)) {
+                                checkAll.checked = true;
+                              } else {
+                                checkAll.checked = false;
+                              }
+                            });
+                          });
+
                         document.getElementById('svgShow').addEventListener('click', function(event) {
                           event.stopPropagation();
-
                           document.getElementById('checkboxContainer').style.display = 'block';
                           this.style.display = 'none';
                           document.getElementById('svgHide').style.display = 'block';
@@ -191,28 +205,105 @@
 
                         document.getElementById('svgHide').addEventListener('click', function(event) {
                           event.stopPropagation();
-
                           document.getElementById('checkboxContainer').style.display = 'none';
                           this.style.display = 'none';
                           document.getElementById('svgShow').style.display = 'block';
                         });
                       </script>
-                      <!--예약하기--> 
+                      <!--예약하기-->
                       <div class="btn-wrap">
-                        <a href="javascript:void(0);" class="btn-type full" id="aBtnLogin" th:text="${totalPrice}+'원 결제하기'">200,000원 결제하기</a>
+                        <button class="btn-type full" id="aBtnLogin">200,000원 결제하기</button>
                       </div>
+                      <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+                      <script th:inline="javascript">
+                        window.onload = function() {
+                          const iamport = IMP.init('imp72370574'); // 발급받은 가맹점 식별코드
+                          const roomId = /*[[${reservation.id}]]*/ '룸실패';
+                          const nameInput = document.getElementById('nameInput');
+                          let name = nameInput.value || '이름실패';
+                            nameInput.addEventListener('input', function() {
+                              name = this.value || '이름실패';
+                            });
+                          const email = /*[[${reservation.email}]]*/ '이메일실패';
+                          const checkIn = /*[[${checkIn}]]*/ '체크인실패';
+                          const checkOut = /*[[${checkOut}]]*/ '체크아웃실패';
+                          const totalPayment = /*[[${totalPrice}]]*/ '총결제금액실패';
+                          const adult = /*[[${adults}]]*/ '성인실패';
+                          const child = /*[[${children}]]*/ '어린이실패';
+
+                          document.getElementById('aBtnLogin').addEventListener('click', function() {
+
+                            /**/
+                            let checkAll = document.getElementById('checkAll');
+                            let isAllChecked = checkAll.checked;
+                            let reservationName = nameInput.value;
+
+                            if (!reservationName) {
+                              alert('예약자 이름을 입력해 주세요.');
+                              return false;
+                            }
+
+                            if (!isAllChecked) {
+                              alert('모든 약관에 동의해 주세요.');
+                              return false;
+                            }
+                            /**/
+
+                            IMP.request_pay({ // 결제 시작
+                              pg: 'kakaopay',
+                              pay_method: 'card',
+                              merchant_uid: 'merchant_' + new Date().getTime(),
+                              amount: /*[[${totalPrice}]]*/ 0,
+                              name: /*[[${reservation.name}]]*/ '트립조이 숙소 결제',
+                              buyer_name: '',
+                              buyer_tel: '',
+                              buyer_email: /*[[${reservation.email}]]*/ 'iamport@siot.do',
+                              buyer_postcode:  '',
+                            }, function(rsp) {
+                              if (rsp.success) {
+                                $.ajax({
+                                  url: '/reserve/'+roomId+'/payment',
+                                  type: 'POST',
+                                  contentType: 'application/json',
+                                  data: JSON.stringify({
+                                    roomId: roomId,
+                                    name: name,
+                                    email: email,
+                                    adult: adult,
+                                    child: child,
+                                    checkIn: checkIn,
+                                    checkOut: checkOut,
+                                    totalPayment: totalPayment
+                                  }),
+                                  success: function(res) {
+                                    if (res.success) {
+                                      // 서버에서 success라는 필드에 true를 보내왔다면 새로운 페이지로 이동
+                                      location.href = '/member/memberMyPageReservationDetails';
+                                    } else {
+                                      // 실패 처리
+                                      alert('결제 검증에 실패했습니다.');
+                                    }
+                                  },
+                                  error: function(err) {
+                                    // 요청이 실패했을 때의 처리
+                                    console.error(err);
+                                  }
+                                });
+                              } else {
+                                alert('결제 실패했습니다.');
+                              }
+                            });
+                          });
+                        }
+                        //]]>
+                      </script>
                     </div>
                     
                 </div>
             </div>
         </div>
     </div>
-
     </section>
-
-
-
-
   </main>
   <script th:inline="javascript">
     //<![CDATA[

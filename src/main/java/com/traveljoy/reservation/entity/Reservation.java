@@ -34,6 +34,10 @@ public class Reservation extends BaseTimeEntity {
     @Column(nullable = false)
     private String reserverName;
 
+    //예약자이메일
+    @Column(nullable = false)
+    private String reserverEmail;
+
     //성인
     @Column(nullable = false)
     private Integer adult;
@@ -76,15 +80,18 @@ public class Reservation extends BaseTimeEntity {
 
 
     @Builder
-    public Reservation(Long id, String reserverName, Integer adult, Integer child, LocalDate checkIn,
-                       LocalDate checkOut, Long totalPayment, PaymentStatus paymentStatus){
+    public Reservation(Long id, String reserverName,String reserverEmail, Integer adult, Integer child, LocalDate checkIn,
+                       LocalDate checkOut, Long totalPayment, PaymentStatus paymentStatus , Member member, Room room){
         this.id = id;
         this.reserverName = reserverName;
+        this.reserverEmail = reserverEmail;
         this.adult = adult;
         this.child = child;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         this.totalPayment = totalPayment;
         this.paymentStatus = paymentStatus;
+        this.member = member;
+        this.room = room;
     }
 }

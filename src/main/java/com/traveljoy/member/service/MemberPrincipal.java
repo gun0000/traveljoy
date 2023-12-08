@@ -30,6 +30,9 @@ public class MemberPrincipal implements UserDetails {
         return member.getMemberId();
     }
 
+    public Long getId() {
+        return member.getId();
+    }
     @Override
     public boolean isAccountNonExpired() {
         return true;

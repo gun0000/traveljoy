@@ -125,6 +125,7 @@ input[type=text], input[type=submit], input[type=password], input[type=search], 
   height: 50px;
   font-size: 14px;
   padding: 0px 45px;
+  width: 100%;
 }
 .form-search .btn-search {
   position: absolute;
