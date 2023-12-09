@@ -8,7 +8,6 @@
   <link rel="stylesheet" type="text/css" th:href="@{/css/font.css}">
   <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
   <style>
-      *{outline: 1px solid #f00;}
   </style>
 </head>
 <body>
@@ -19,46 +18,43 @@
     <section class="py-5">
       <div class="container">
         <div class="row">
-          <div class="col-3">
-            <div class="box">내 정보</div>
-            <div class="box">예약 내역</div>
-            <div class="box">문의 내역</div>
-          </div>
+          <!--사이드바공통영역-->
+          <th:block th:replace="~{member/common/sidebar :: sidebarMember}"></th:block>
+          <!--사이드바공통영역-end-->
           <div class="col-9">
             <div class="box">
               <h2>내 정보</h2>
-              <div class="row">
-                <div class="col-6">
-                  <div class="row">
-                    <div class="col-12">
-                      <img src="image.jpg" alt="프로필이미지" />
-                      <p>닉네임</p>
-                      <p>리뷰수</p>
-                    </div>
-                  </div>
+              <div class="row mt-4 border" id="main-contents">
+
+                <div class="col-2">
+                  <img src="/images/basicuser.svg" alt="mdo" width="60" height="60" class="rounded-circle">
                 </div>
-                <div class="col-6">
-                  <div class="row">
-                    <div class="col-12"><button>회원수정</button></div>
-                    <div class="col-12"><button>회원탈퇴</button></div>
-                  </div>
+
+                <div class="col-8">
+                  <p>아이디 : ABCD</p>
+                  <p>리뷰수 : 10개</p>
+                </div>
+
+                <div class="col-2">
+                    <div><button class="sub-button">회원수정</button></div>
+                    <div><button class="sub-button">회원탈퇴</button></div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-6">
-                  <div class="row">
-                    <div class="col-12">
-                      <img src="image.jpg" alt="프로필이미지" />
-                      <p>숙소이름</p>
-                      <p>리뷰내용</p>
-                    </div>
-                  </div>
+              <div class="row mt-4 border" style="border-radius: 20px; padding: 20px;">
+
+                <div class="col-2">
+                  <img class="img-fluid rounded" src="https://dummyimage.com/150x150/ced4da/6c757d.jpg" alt="...">
                 </div>
-                <div class="col-6">
-                  <div class="row">
-                    <div class="col-12"><button>리뷰삭제</button></div>
-                  </div>
+
+                <div class="col-8">
+                  <p>숙소이름</p>
+                  <p>리뷰내용</p>
                 </div>
+
+                <div class="col-2">
+                  <div><button class="sub-button">리뷰삭제</button></div>
+                </div>
+
               </div>
             </div>
           </div>

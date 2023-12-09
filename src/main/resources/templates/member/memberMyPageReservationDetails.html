@@ -8,7 +8,6 @@
   <link rel="stylesheet" type="text/css" th:href="@{/css/font.css}">
   <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
   <style>
-      *{outline: 1px solid #f00;}
   </style>
 </head>
 <body>
@@ -19,44 +18,42 @@
     <section class="py-5">
       <div class="container">
         <div class="row">
-          <div class="col-3">
-            <div class="box border p-4">내 정보</div>
-            <div class="box border p-4">예약 내역</div>
-            <div class="box border p-4">문의 내역</div>
-          </div>
+          <!--사이드바공통영역-->
+          <th:block th:replace="~{member/common/sidebar :: sidebarMember}"></th:block>
+          <!--사이드바공통영역-end-->
           <div class="col-9">
-            <div class="box"> 
+            <div class="box">
               <h2>예약내역</h2>
               <!--예약내역 내역 하나-->
-              <div class="mt-4 border">
-                <div class="row">
-                  
+              <div id="main-contents" class="mt-4 border">
+                <div class="row" style="margin-bottom: 20px;">
+
                   <div class="col-2">
-                        <img class="img-fluid rounded" src="https://dummyimage.com/150x150/ced4da/6c757d.jpg" alt="...">
+                    <img class="img-fluid rounded" src="https://dummyimage.com/150x150/ced4da/6c757d.jpg" alt="...">
                   </div>
 
-                  <div class="col-5">
+                  <div class="col-8">
                     <p>숙소이름 :</p>
                     <p>예약자 이름 : 홍길동</p>
                     <p>총 결제 금액 : 200,000원</p>
                   </div>
 
-                  <div class="col-5">
-                    <p>결제됨</p>
-                    <div><button>문의하기</button></div>
-                    <div><button>리뷰하기</button></div>
+                  <div class="col-2">
+                    <p style="font-weight: bolder; color: #f45858;">결제됨</p>
+                    <div><button class="sub-button">문의하기</button></div>
+                    <div><button class="sub-button">리뷰하기</button></div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-6">
-                    <p>가는날: 날짜</p>
+                <div id="travel-dates" class="row">
+                  <div class="col-6" >
+                    <div>가는날: 2023.02.02</div>
                   </div>
                   <div class="col-6">
-                    <p>오는날: 날짜</p>
+                    <div>오는날: 2023.02.03</div>
                   </div>
                 </div>
               </div>
-              
+
             </div>
           </div>
         </div>
