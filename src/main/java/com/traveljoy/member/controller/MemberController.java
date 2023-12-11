@@ -3,14 +3,20 @@ package com.traveljoy.member.controller;
 import com.traveljoy.member.dto.CheckIdDto;
 import com.traveljoy.member.dto.EmailVerificationCodeDto;
 import com.traveljoy.member.dto.MemberJoinDto;
+import com.traveljoy.member.dto.MyPageReservationDto;
+import com.traveljoy.member.service.MemberPrincipal;
 import com.traveljoy.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Validated
@@ -72,7 +78,13 @@ public class MemberController {
     //예약내역
     @Secured({"ROLE_MEMBER","ROLE_ADMIN"})
     @GetMapping("/memberMyPageReservationDetails")
-    public String memberMyPageReservationDetails(){
+    public String memberMyPageReservationDetails(Model model){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MemberPrincipal MemberPrincipal = (MemberPrincipal) authentication.getPrincipal();
+        Long memberId = MemberPrincipal.getId();
+        List<MyPageReservationDto> myPageReservationDtos = memberService.getReservationShowBymemberId(memberId);
+        model.addAttribute("reservations", myPageReservationDtos);
         return "member/memberMyPageReservationDetails";
     }
 

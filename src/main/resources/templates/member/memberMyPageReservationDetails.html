@@ -25,7 +25,7 @@
             <div class="box">
               <h2>예약내역</h2>
               <!--예약내역 내역 하나-->
-              <div id="main-contents" class="mt-4 border">
+              <div class="mt-4 border reservation-contents">
                 <div class="row" style="margin-bottom: 20px;">
 
                   <div class="col-2">
@@ -53,6 +53,49 @@
                   </div>
                 </div>
               </div>
+
+              <div th:each="reservation : ${reservations}" class="mt-4 border reservation-contents">
+                <div class="row" style="margin-bottom: 20px;">
+
+                  <div class="col-2">
+                    <img class="img-fluid rounded" th:src="'/images/roomimage/'+${reservation.image}" alt="...">
+                  </div>
+
+                  <div class="col-8">
+                    <p th:text="'숙소이름 : '+${reservation.roomName}">숙소이름 :</p>
+                    <p th:text="'예약자 이름 : '+${reservation.reserverName}">예약자 이름 : 홍길동</p>
+                    <p class="price" th:text="'총 결제 금액 : '+${reservation.totalPayment}+'원'">총 결제 금액 : 000,000원</p>
+                  </div>
+
+                  <div class="col-2">
+                    <p style="font-weight: bolder; color: #f45858;">결제됨</p>
+                    <div><button class="sub-button">문의하기</button></div>
+                    <div><button class="sub-button">리뷰하기</button></div>
+                  </div>
+                </div>
+                <div class="row travel-dates">
+                  <div class="col-6" >
+                    <div th:text="'가는날: '+${reservation.checkIn}">가는날: 0000.00.00</div>
+                  </div>
+                  <div class="col-6">
+                    <div th:text="'오는날: '+${reservation.checkOut}">오는날: 0000.00.00</div>
+                  </div>
+                </div>
+              </div>
+              <script th:inline="javascript">
+                //<![CDATA[
+                var prices = document.getElementsByClassName('price'); // 클래스 이름으로 요소를 검색
+
+                for (var i = 0; i < prices.length; i++) {
+                  var price = prices[i].innerText; // 각 요소의 텍스트를 가져옴
+                  prices[i].innerText = numberWithCommas(price); // 천 단위로 콤마를 찍은 텍스트로 변경
+                }
+
+                function numberWithCommas(x) {
+                  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+                //]]>
+              </script>
 
             </div>
           </div>

@@ -2,6 +2,7 @@ package com.traveljoy.member.service;
 
 import com.sun.security.auth.UserPrincipal;
 import com.traveljoy.member.dto.MemberJoinDto;
+import com.traveljoy.member.dto.MyPageReservationDto;
 import com.traveljoy.member.entity.EmailVerificationCode;
 import com.traveljoy.member.entity.Member;
 import com.traveljoy.member.repository.EmailVerificationCodeRepository;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -118,4 +120,11 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(memberId));
         return new MemberPrincipal(member); // MemberPrincipal UserDetails 인터페이스를 구현한 클래스
     }
+
+    //내정보페이지 예약내역
+    public List<MyPageReservationDto> getReservationShowBymemberId(Long memberId){
+        return memberRepository.getReservationShowBymemberId(memberId);
+    }
+
+
 }

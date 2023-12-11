@@ -372,11 +372,11 @@ input[type=text], input[type=submit], input[type=password], input[type=search], 
   margin-bottom: 10px;
 }
 /*회원페이지 메인*/
-#main-contents{
+.reservation-contents{
   border-radius: 20px;
   padding: 20px;
 }
-#travel-dates{
+.travel-dates{
   background: #f1f3fb;
   border-radius: 20px;
   border: 1px solid #e3e3e3;
