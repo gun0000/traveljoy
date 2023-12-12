@@ -25,7 +25,9 @@ public class RoomDetailDto {
     private Long reviewCount;
 
     private List<RoomReviewDto> roomReviewDto;
-
+    @Getter
+    @Setter
+    @NoArgsConstructor
     public static class RoomReviewDto{
         private String reviewMemberName;
         private String reviewContent;

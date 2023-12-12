@@ -33,7 +33,7 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
                         //로그인하지 않아도 들어갈 수 있거나 보여야할 예외
-                        .requestMatchers("/","admin/**","/room/**","/reserve/**","/member/**","/status","/css/**","/js/**", "/images/**", "/view/join", "/auth/join","/view/login").permitAll()
+                        .requestMatchers("/","admin/**","/room/**","/review/**","/reserve/**","/member/**","/status","/css/**","/js/**", "/images/**", "/view/join", "/auth/join","/view/login").permitAll()
                         .anyRequest().authenticated()	// 어떠한 요청이라도 인증필요
                 )
                 //.formLogin(AbstractHttpConfigurer::disable)

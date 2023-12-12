@@ -14,7 +14,7 @@ public class MyPageReservationDto {
     private Long memberId;
     private String image;
     private String roomName;
-    private Long id;
+    private Long roomId;
     private String reserverName;
     private String reserverEmail;
     private Integer adult;
@@ -23,12 +23,13 @@ public class MyPageReservationDto {
     private LocalDate checkOut;
     private Long totalPayment;
     private Reservation.PaymentStatus paymentStatus;
+    private boolean reviewType;
 
-    public MyPageReservationDto(String image,String roomName,Long id,String reserverName,String reserverEmail
-            ,Integer adult,Integer child,LocalDate checkIn,LocalDate checkOut,Long totalPayment,Reservation.PaymentStatus paymentStatus){
+    public MyPageReservationDto(String image,String roomName,Long roomId,String reserverName,String reserverEmail
+            ,Integer adult,Integer child,LocalDate checkIn,LocalDate checkOut,Long totalPayment,Reservation.PaymentStatus paymentStatus,boolean reviewType){
         this.image = image;
         this.roomName = roomName;
-        this.id = id;
+        this.roomId = roomId;
         this.reserverName = reserverName;
         this.reserverEmail = reserverEmail;
         this.adult = adult;
@@ -37,6 +38,7 @@ public class MyPageReservationDto {
         this.checkOut = checkOut;
         this.totalPayment = totalPayment;
         this.paymentStatus = paymentStatus;
+        this.reviewType = reviewType;
     }
 
 

@@ -100,6 +100,7 @@ public class RoomController {
     public String roomDetail(@PathVariable Long roomId, HttpServletRequest request, HttpServletResponse response,Model model){
         addRoomIdToCookie(roomId, request, response);
         RoomDetailDto roomDetailDto = roomService.getRoomDetail(roomId);
+        model.addAttribute("reviews", roomDetailDto.getRoomReviewDto());
         model.addAttribute("room", roomDetailDto);
         return "room/roomDetail";
     }

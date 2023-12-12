@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리뷰등록</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}">
+    <script src="script.js" defer></script>
+    <style>
+        /*기본*/
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        @media (min-width: 1200px){
+            /*컸을때 박스크키*/
+            .reg-wrap {
+                width: 504px;
+                margin: 5px 100px;
+            }
+
+
+            .form-item input:not(:placeholder-shown) + .title {
+                font-size: 11px;
+                top: 9px;
+                color: #94949a;
+            }
+
+            .form-item input {
+                padding-top: 15px;
+            }
+            .form-item input {
+                box-sizing: border-box;
+                height: 64px;
+                padding: 0 20px;
+                border: 1px solid #efefef;
+                background: #f4f4f4;
+                color: #111;
+                border-radius: 12px;
+            }
+            .form-item label.title {
+                font-size: 18px;
+                top: 21px;
+            }
+            .btn-type full{
+                max-width: 100%;
+                height: 64px;
+                font-size: 20px;
+            }
+            .chk-box label {
+                font-size: 16px;
+                font-weight: 600;
+                margin-right: 10px
+            }
+            .sns-box {
+                padding-top: 60px;
+                text-align: center;
+            }
+            .tooltip {
+                background: #fff;
+                border-radius: 27px;
+                padding: 17px 19px;
+                font-size: 18px;
+                min-width: 185px;
+            }
+        }
+
+
+        /*인풋스타일*/
+        input[type=text]:focus, input[type=number]:focus, input[type=password]:focus, input[type=tel]:focus, select:focus {
+            border-color: #b8ffc5;
+            background: #e8ffef;
+            outline: none;
+            color: #111;
+        }
+        input[type=text], input[type=submit], input[type=password], input[type=search], input[type=number], input[type=reset], input[type=email], input[type=tel], input[type=search], input[type=file], input[type=email], input[type=tel], select {
+            height: 56px;
+            padding: 0 20px;
+            border: 1px solid #efefef;
+            background: #f4f4f4;
+            color: #111;
+            border-radius: 12px;
+        }
+
+
+        .form-item:first-child {
+            margin-top: 0;
+        }
+        .form-item {
+            position: relative;
+            margin-top: 12px;
+        }
+
+        .form-item label.title {
+            position: absolute;
+            left: 20px;
+            top: 19px;
+            display: block;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            font-size: 15px;
+            font-weight: 600;
+            color: #94949a;
+        }
+        /*인풋쓰고 글씨 올리기*/
+        .form-item input:focus ~ .title {
+            font-size: 11px;
+            top: 9px;
+            color: #03c75a;
+        }
+        .form-item select:focus + .title {
+            font-size: 11px;
+            top: 9px;
+            color: #03c75a;
+        }
+        .form-item input:not(:placeholder-shown) + .title {
+            font-size: 11px;
+            top: 9px;
+            color: #94949a;
+        }
+        .form-item select + .title {
+            font-size: 11px;
+            top: 9px;
+            color: #94949a;
+        }
+        /*end*/
+        .btn-wrap {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+        }
+        .btn-type {
+            background: #03c75a;
+            color: #fff;
+            max-width: 100%;
+            border: 0px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            height: 56px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            transition: background 0.2s ease;
+            box-sizing: border-box;
+        }
+        /*작아졌을때 인풋*/
+        select, input, textarea {
+            width: 100%;
+            vertical-align: middle;
+            box-shadow: none;
+            outline: none;
+            border: 0;
+            font-family: "SUIT", sans-serif;
+            -moz-appearance: none;
+            font-weight: 600;
+            font-size: 15px;
+            color: inherit;
+        }
+        #description{
+            height: 300px;
+            padding: 40px 20px;
+            border: 1px solid #efefef;
+            background: #f4f4f4;
+            color: #111;
+            border-radius: 12px;
+            resize: none;
+        }
+        #description:focus {
+            border-color: #b8ffc5;
+            background: #e8ffef;
+            outline: none;
+            color: #111;
+        }
+        #findbutton{
+            background: #8f8f8f;
+            color: #fff;
+        }
+        #inputContainer{
+            padding: 40px 20px;
+            border: 1px solid #efefef;
+            background: #f4f4f4;
+            color: #111;
+            border-radius: 12px;
+        }
+        #imageUpload1{
+            margin-top: 20px;
+        }
+
+        .rating-box {
+            position: relative;
+            background: #fff;
+            padding: 25px 50px 35px;
+            border-radius: 25px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+        }
+        .rating-box header {
+            font-size: 22px;
+            color: #dadada;
+            font-weight: 500;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .rating-box .stars {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            justify-content: center;
+        }
+        .stars i {
+            color: #e6e6e6;
+            font-size: 35px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .stars i.active {
+            color: #ff9c1a;
+        }
+        .fa-star:before{content:"\f005"}
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+</head>
+<body>
+<main id="wrapper">
+    <!-- 콘텐츠 -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- 메인 콘텐츠 -->
+        <div id="content">
+            <!-- 상단바 -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <!-- 상단바 탐색바 -->
+                <ul class="navbar-nav ml-auto">
+                </ul>
+            </nav>
+            <!-- 상단바 끝 -->
+            <!-- 페이지 콘텐츠 시작-->
+            <div class="container-fluid">
+                <!-- 페이지 제목 -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">리뷰 등록</h1>
+                </div>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary"></h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="reg-wrap">
+                            <form class="form-box" th:action="@{/review/reg/{id}(id=${roomId})}" method="post">
+                                <div class="form-item">
+                                    <textarea id="description" name="content" maxlength="385"></textarea>
+                                    <label for="description" class="title">리뷰 내용</label>
+                                </div>
+                                <div class="form-item">
+                                    <div class="rating-box">
+                                        <p style="text-align: center;font-size: 18px;">평점을 매겨주세요.</p>
+                                        <div class="stars">
+                                            <i class="fa-solid fa-star" data-value="1"></i>
+                                            <i class="fa-solid fa-star" data-value="2"></i>
+                                            <i class="fa-solid fa-star" data-value="3"></i>
+                                            <i class="fa-solid fa-star" data-value="4"></i>
+                                            <i class="fa-solid fa-star" data-value="5"></i>
+                                        </div>
+                                        <input type="hidden" id="rating" name="rating">
+                                    </div>
+                                </div>
+                                <div class="btn-wrap">
+                                    <button type="submit" class="btn-type full" id="aBtnLogin">리뷰등록</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--페이지 콘텐츠 시작 !끝-->
+        </div>
+        <!-- 메인 콘텐츠 !끝 -->
+    </div>
+    <!-- 콘텐츠 end -->
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.fa-star').click(function() {
+            var rating = $(this).data('value');
+            $('#rating').val(rating);
+        });
+    });
+</script>
+<script>
+    const stars = document.querySelectorAll(".stars i");
+    stars.forEach((star, index1) => {
+        star.addEventListener("click", () => {
+            stars.forEach((star, index2) => {
+                index1 >= index2 ? star.classList.add("active") : star.classList.remove("active");
+            });
+        });
+    });
+</script>
+<script th:inline="javascript">
+    /*[# th:if="${regSuccess}"]*/
+    alert('리뷰가 등록되었습니다.');
+    window.opener.location.reload();
+    window.close();
+    /*[/]*/
+</script>
+
+</body>
+</html>

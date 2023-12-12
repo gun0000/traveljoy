@@ -332,10 +332,10 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
         List<RoomDetailDto.RoomReviewDto> reviews = queryFactory
                 .select(Projections.fields(
                         RoomDetailDto.RoomReviewDto.class,
-                        review.member.name,
-                        review.content,
-                        review.rating,
-                        review.reviewImage
+                        review.member.memberId.as("reviewMemberName"),
+                        review.content.as("reviewContent"),
+                        review.rating.as("reviewRating"),
+                        review.reviewImage.as("reviewImage")
                 ))
                 .from(review)
                 .where(review.room.id.eq(roomId))

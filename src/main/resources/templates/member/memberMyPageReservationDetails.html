@@ -7,6 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" th:href="@{/css/font.css}">
   <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
   <style>
   </style>
 </head>
@@ -25,35 +26,6 @@
             <div class="box">
               <h2>예약내역</h2>
               <!--예약내역 내역 하나-->
-              <div class="mt-4 border reservation-contents">
-                <div class="row" style="margin-bottom: 20px;">
-
-                  <div class="col-2">
-                    <img class="img-fluid rounded" src="https://dummyimage.com/150x150/ced4da/6c757d.jpg" alt="...">
-                  </div>
-
-                  <div class="col-8">
-                    <p>숙소이름 :</p>
-                    <p>예약자 이름 : 홍길동</p>
-                    <p>총 결제 금액 : 200,000원</p>
-                  </div>
-
-                  <div class="col-2">
-                    <p style="font-weight: bolder; color: #f45858;">결제됨</p>
-                    <div><button class="sub-button">문의하기</button></div>
-                    <div><button class="sub-button">리뷰하기</button></div>
-                  </div>
-                </div>
-                <div id="travel-dates" class="row">
-                  <div class="col-6" >
-                    <div>가는날: 2023.02.02</div>
-                  </div>
-                  <div class="col-6">
-                    <div>오는날: 2023.02.03</div>
-                  </div>
-                </div>
-              </div>
-
               <div th:each="reservation : ${reservations}" class="mt-4 border reservation-contents">
                 <div class="row" style="margin-bottom: 20px;">
 
@@ -68,9 +40,12 @@
                   </div>
 
                   <div class="col-2">
-                    <p style="font-weight: bolder; color: #f45858;">결제됨</p>
+                    <p th:if="${reservation.paymentStatus.getStatus() == '결제완료'}" style="font-weight: bolder; color: #f45858;">결제됨</p>
+                    <p th:if="${reservation.paymentStatus.getStatus() == '결제대기중'}" style="font-weight: bolder; color: #f45858;">결제중</p>
+
                     <div><button class="sub-button">문의하기</button></div>
-                    <div><button class="sub-button">리뷰하기</button></div>
+                    <div th:if="${!reservation.reviewType}"><button class="sub-button" th:id="'review-button-' + ${reservation.roomId}" th:value="${reservation.roomId}">리뷰하기</button></div>
+
                   </div>
                 </div>
                 <div class="row travel-dates">
@@ -82,6 +57,17 @@
                   </div>
                 </div>
               </div>
+              <!--리뷰등록-->
+              <script th:inline="javascript">
+                /*<![CDATA[*/
+                $(document).ready(function() {
+                  $("[id^='review-button-']").click(function() {
+                    var roomId = $(this).val();
+                    window.open("/review/reg/" + roomId, "리뷰하기", "width=580,height=1000");
+                  });
+                });
+                /*]]>*/
+              </script>
               <script th:inline="javascript">
                 //<![CDATA[
                 var prices = document.getElementsByClassName('price'); // 클래스 이름으로 요소를 검색

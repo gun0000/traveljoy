@@ -5,6 +5,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.traveljoy.member.dto.MyPageReservationDto;
 import com.traveljoy.reservation.entity.QReservation;
+import com.traveljoy.review.entity.QReview;
 import com.traveljoy.room.entity.QRoom;
 import com.traveljoy.room.entity.QRoomImage;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
         QReservation reservation = QReservation.reservation;
         QRoomImage roomImage = QRoomImage.roomImage;
         QRoom room = QRoom.room;
+        QReview review = QReview.review;
         List<MyPageReservationDto> myPageReservationDtos =queryFactory
                 .select(Projections.constructor(
                         MyPageReservationDto.class,
@@ -34,7 +36,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                                 .select(room.name)
                                 .from(room)
                                 .where(room.id.eq(reservation.room.id)),
-                        reservation.id,
+                        reservation.room.id,
                         reservation.reserverName,
                         reservation.reserverEmail,
                         reservation.adult,
@@ -42,10 +44,16 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                         reservation.checkIn,
                         reservation.checkOut,
                         reservation.totalPayment,
-                        reservation.paymentStatus
+                        reservation.paymentStatus,
+                        JPAExpressions
+                                .selectOne()
+                                .from(review)
+                                .where(review.room.id.eq(reservation.room.id),
+                                        review.member.id.eq(memberId))
+                                .exists()
                         ))
                 .from(reservation)
-                .where(reservation.id.eq(memberId))
+                .where(reservation.member.id.eq(memberId))
                 .fetch();
 
         return myPageReservationDtos;

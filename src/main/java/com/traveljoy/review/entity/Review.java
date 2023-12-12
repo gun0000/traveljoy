@@ -42,11 +42,10 @@ public class Review extends BaseTimeEntity {
     private String reviewImage;
 
     @Builder
-    public Review(Long id, String content, Double rating, String reviewImage, Member member, Room room){
-        this.id = id;
+    public Review(String content, Double rating, Member member, Room room){
         this.content = content;
         this.rating = rating;
-        this.setImageUrl(reviewImage); // 검증을 통해 이미지 설정
+        //this.setImageUrl(reviewImage); // 검증을 통해 이미지 설정
         this.member = member;
         this.room = room;
     }
