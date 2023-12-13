@@ -390,3 +390,34 @@ input[type=text], input[type=submit], input[type=password], input[type=search], 
   border-radius: 12px;
   padding: 5px;
 }
+/*페이징*/
+.page-item.active .page-link {
+  z-index: 3;
+  color: #fff;
+  background-color: #03c75a;
+  border-color: #03c75a;
+}
+.page-link {
+  position: relative;
+  display: block;
+  padding: var(--bs-pagination-padding-y) var(--bs-pagination-padding-x);
+  font-size: var(--bs-pagination-font-size);
+  color: #03c75a;
+  text-decoration: none;
+  background-color: var(--bs-pagination-bg);
+  border: var(#03c75a) solid var(#03c75a);
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.page-link:hover {
+  z-index: 2;
+  color: rgba(3, 199, 90, 1);
+  background-color: var(--bs-pagination-hover-bg);
+  border-color: rgba(3, 199, 90, 1);
+}
+.page-link:focus {
+  z-index: 3;
+  color: rgba(3, 199, 90, 1);
+  background-color: var(--bs-pagination-focus-bg);
+  outline: 0;
+  box-shadow: var(--bs-green);
+}
