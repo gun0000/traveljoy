@@ -1,9 +1,6 @@
 package com.traveljoy.member.controller;
 
-import com.traveljoy.member.dto.CheckIdDto;
-import com.traveljoy.member.dto.EmailVerificationCodeDto;
-import com.traveljoy.member.dto.MemberJoinDto;
-import com.traveljoy.member.dto.MyPageReservationDto;
+import com.traveljoy.member.dto.*;
 import com.traveljoy.member.service.MemberPrincipal;
 import com.traveljoy.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -72,7 +69,12 @@ public class MemberController {
     //내 정보,리뷰 페이지
     @Secured({"ROLE_MEMBER","ROLE_ADMIN"})
     @GetMapping("/memberMyPage")
-    public String memberMyPage(){
+    public String memberMyPage(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MemberPrincipal MemberPrincipal = (MemberPrincipal) authentication.getPrincipal();
+        Long memberId = MemberPrincipal.getId();
+        MyPageMemberDto myPageMemberDto = memberService.getMyPageMember(memberId);
+        model.addAttribute("myPage",myPageMemberDto);
         return "member/memberMyPage";
     }
     //예약내역

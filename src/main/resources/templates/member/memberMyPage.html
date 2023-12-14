@@ -32,8 +32,9 @@
                 </div>
 
                 <div class="col-8">
-                  <p>아이디 : ABCD</p>
-                  <p>리뷰수 : 10개</p>
+                  <p th:text="'아이디 : '+${myPage.memberId}">아이디 : 0000</p>
+                  <p th:text="'이메일 : '+${myPage.email}">이메일 : 0000@000.com</p>
+                  <p th:text="'리뷰수 : '+${myPage.reviewCnt}+'개'">리뷰수 : 00</p>
                 </div>
 
                 <div class="col-2">

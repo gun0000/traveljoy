@@ -2,6 +2,7 @@ package com.traveljoy.member.service;
 
 import com.sun.security.auth.UserPrincipal;
 import com.traveljoy.member.dto.MemberJoinDto;
+import com.traveljoy.member.dto.MyPageMemberDto;
 import com.traveljoy.member.dto.MyPageReservationDto;
 import com.traveljoy.member.entity.EmailVerificationCode;
 import com.traveljoy.member.entity.Member;
@@ -124,6 +125,11 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     //내정보페이지 예약내역
     public List<MyPageReservationDto> getReservationShowBymemberId(Long memberId){
         return memberRepository.getReservationShowBymemberId(memberId);
+    }
+
+    @Override
+    public MyPageMemberDto getMyPageMember(Long memberId) {
+        return memberRepository.getMyPageMember(memberId);
     }
 
 

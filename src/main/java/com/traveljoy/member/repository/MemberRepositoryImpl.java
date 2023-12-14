@@ -3,7 +3,9 @@ package com.traveljoy.member.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.traveljoy.member.dto.MyPageMemberDto;
 import com.traveljoy.member.dto.MyPageReservationDto;
+import com.traveljoy.member.entity.QMember;
 import com.traveljoy.reservation.entity.QReservation;
 import com.traveljoy.review.entity.QReview;
 import com.traveljoy.room.entity.QRoom;
@@ -57,5 +59,30 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .fetch();
 
         return myPageReservationDtos;
+    }
+
+    @Override
+    public MyPageMemberDto getMyPageMember(Long memberId) {
+
+        QMember member = QMember.member;
+        QReview review = QReview.review;
+
+        MyPageMemberDto myPageMemberDto = queryFactory
+                .select(Projections.constructor(MyPageMemberDto.class,
+                        member.name,
+                        member.memberId,
+                        member.email,
+                        member.profileImage,
+                        JPAExpressions
+                                .select(review.count())
+                                .from(review)
+                                .where(review.member.id.eq(memberId))
+
+                        ))
+                .from(member)
+                .where(member.id.eq(memberId))
+                .fetchOne();
+
+        return myPageMemberDto;
     }
 }
