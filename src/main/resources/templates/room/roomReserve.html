@@ -106,7 +106,7 @@
                           <!-- 숙소이름부분-->
                           <h4 class="fw-bolder mb-1" th:text="${reservation.name}">숙소이름</h4>
                           <p class="fs-5 mb-3" th:text="${checkIn} + ' ~ ' + ${checkOut}">2023년 1월 1일 ~ 2023년 1월 2일</p>
-                          <p class="fs-5 mb-3" th:text="'성인 : ' + ${adults} + '명 어린이 : ' + ${children} + '명'">성인 : 0명 어린이 : 0명</p>
+                          <p class="fs-5 mb-3" th:text="'-성인 : ' + ${adults} + '명 -어린이 : ' + ${children} + '명'">성인 : 0명 어린이 : 0명</p>
                           <!--가격부분-->
                           <p class="fs-5 mb-3" id="pricePerNight" th:text="'1박당 금액 : '+${reservation.price}+'원'">1박당 금액 : 100,000원</p>
                           <p id="totalPrice" class="fs-5 mb-3" th:text="'총 결제 금액 : '+${totalPrice}+'원'">총 결제 금액 : 200,000원</p>
