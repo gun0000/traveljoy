@@ -1,9 +1,14 @@
 spring:
+  #datasource:
+    #url: jdbc:h2:tcp://localhost/~/traveljoy
+    #username: sa
+    #password:
+    #driver-class-name: org.h2.Driver
   datasource:
-    url: jdbc:h2:tcp://localhost/~/traveljoy
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/traveljoy
+    username: root
+    password: 1234
   sql:
     init:
       mode: always # 서버 시작시 항상 classpath의 sql문을 실행하도록 설정

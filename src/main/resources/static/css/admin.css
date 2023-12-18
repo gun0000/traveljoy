@@ -285,3 +285,10 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
     text-align: left;
 }
 }
+.sub-button{
+    background: #8f8f8f;
+    color: #fff;
+    border: 1px solid #efefef;
+    border-radius: 12px;
+    padding: 5px;
+}

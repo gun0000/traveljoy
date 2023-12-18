@@ -192,8 +192,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                 "JOIN room_image ri ON r.id = ri.room_id " +
                 "WHERE ri.is_main = TRUE " +
                 "ORDER BY reviewCount DESC, reviewAverage DESC " +
-                "LIMIT " + limit + " " +
-                "OFFSET "+offset;
+                "LIMIT " + limit + " OFFSET "+ offset;
 
         List<Object[]> result = entityManager.createNativeQuery(sql, Object[].class).getResultList();
         List<RoomShowDto> roomShowDtos = result.stream()
@@ -203,7 +202,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                         ((Long) row[4]),  // review count
                         ((Long) row[0]),  // room id
                         (String) row[1],       // room name
-                        ((BigDecimal) row[5]).doubleValue(), // review average
+                        ((Double) row[5]), // review average
                         ((Long) row[2])); // room price
             })
             .collect(Collectors.toList());
