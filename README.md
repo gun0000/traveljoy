@@ -27,14 +27,25 @@
 
 
 ## 🚀 프로젝트 소개
-### 1
 
-### 2
+### -회원가입-로그인
 
-### 3
+https://github.com/gun0000/traveljoy/assets/120723089/210c7132-a01f-4a61-90a8-cd26e7b4ab07
 
-### 4
+### -메인화면
 
-### 5
+https://github.com/gun0000/traveljoy/assets/120723089/b84bb015-268a-44c7-96c6-d80636054c73
+
+### -지역 -테마 -인기숙소 -검색
+
+https://github.com/gun0000/traveljoy/assets/120723089/6b8ba024-cdd2-4ba0-9b89-51078bd6faae
+
+### -예약 -결제 -리뷰
+
+https://github.com/gun0000/traveljoy/assets/120723089/bf1968f7-a481-4ec9-bc43-34be30889683
+
+### -관리자페이지 -등록 - 목록
+
+https://github.com/gun0000/traveljoy/assets/120723089/acc018fd-a723-4cdb-97f1-a04e28103a56
 
 ## 📊 DB 다이어그램
