@@ -49,3 +49,6 @@ https://github.com/gun0000/traveljoy/assets/120723089/bf1968f7-a481-4ec9-bc43-34
 https://github.com/gun0000/traveljoy/assets/120723089/acc018fd-a723-4cdb-97f1-a04e28103a56
 
 ## 📊 DB 다이어그램
+![테이블](https://github.com/gun0000/traveljoy/assets/120723089/0cc9ffcb-caf9-4ca8-8ebf-47e4fc952f86)
+
+
