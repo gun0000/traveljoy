@@ -4,6 +4,8 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -34,6 +36,11 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
     private final EntityManager entityManager;
+
+    private NumberExpression<Double> getRoundedAvgRating(QReview review) {
+        NumberExpression<Double> avgRating = review.rating.avg().coalesce(0.0);
+        return Expressions.numberTemplate(Double.class, "round({0}, 1)", avgRating);
+    }
 
     //관리자페이지 숙소 리스트
     @Override
@@ -137,7 +144,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                         room.id,
                         room.name,
                         JPAExpressions
-                                .select(review.rating.avg().coalesce(0.0))
+                                .select(getRoundedAvgRating(review))
                                 .from(review)
                                 .where(review.room.id.eq(room.id)),
                         room.price
@@ -169,7 +176,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                         room.id,
                         room.name,
                         JPAExpressions
-                                .select(review.rating.avg().coalesce(0.0))
+                                .select(getRoundedAvgRating(review))
                                 .from(review)
                                 .where(review.room.id.eq(room.id)),
                         room.price
@@ -187,7 +194,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
     public List<RoomShowDto> getPopularRooms(int offset,int limit) {
         String sql = "SELECT r.id, r.name, r.price, ri.image, " +
                 "(SELECT COUNT(*) FROM review rv WHERE rv.room_id = r.id) AS reviewCount, " +
-                "COALESCE((SELECT AVG(rv.rating) FROM review rv WHERE rv.room_id = r.id), 0) AS reviewAverage " +
+                "ROUND(COALESCE((SELECT AVG(rv.rating) FROM review rv WHERE rv.room_id = r.id), 0), 1) AS reviewAverage " +
                 "FROM room r " +
                 "JOIN room_image ri ON r.id = ri.room_id " +
                 "WHERE ri.is_main = TRUE " +
@@ -226,7 +233,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                         room.id,
                         room.name,
                         JPAExpressions
-                                .select(review.rating.avg().coalesce(0.0))
+                                .select(getRoundedAvgRating(review))
                                 .from(review)
                                 .where(review.room.id.eq(room.id)),
                         room.price
@@ -260,7 +267,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                         room.id,
                         room.name,
                         JPAExpressions
-                                .select(review.rating.avg().coalesce(0.0))
+                                .select(getRoundedAvgRating(review))
                                 .from(review)
                                 .where(review.room.id.eq(room.id)),
                         room.price
@@ -298,7 +305,7 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom {
                         room.locationY,
                         ExpressionUtils.as(
                                 JPAExpressions
-                                        .select(review.rating.avg().coalesce(0.0))
+                                        .select(getRoundedAvgRating(review))
                                         .from(review)
                                         .where(review.room.id.eq(room.id)),
                                 "rating"),
